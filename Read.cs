@@ -19,18 +19,18 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Read a signed byte.
+        /// Read a sbyte.
         /// </summary>
-        /// <returns>A signed byte.</returns>
+        /// <returns>A sbyte.</returns>
         public sbyte ReadSByte()
         {
             return Reader.ReadSByte();
         }
 
         /// <summary>
-        /// Read an unsigned byte.
+        /// Read a byte.
         /// </summary>
-        /// <returns>An unsigned byte.</returns>
+        /// <returns>A byte.</returns>
         public byte ReadByte()
         {
             return Reader.ReadByte();
@@ -42,34 +42,34 @@ namespace SimpleStream
         /// <returns>A short.</returns>
         public short ReadShort()
         {
-            return BitConverter.ToInt16(Reads(() => Reader.ReadBytes(2), BigEndian), 0);
+            return BitConverter.ToInt16(Reads(() => ReadBytes(2), BigEndian), 0);
         }
 
         /// <summary>
-        /// Read an unsigned short.
+        /// Read a ushort.
         /// </summary>
-        /// <returns>An unsigned short.</returns>
+        /// <returns>A ushort.</returns>
         public ushort ReadUShort()
         {
-            return BitConverter.ToUInt16(Reads(() => Reader.ReadBytes(2), BigEndian), 0);
+            return BitConverter.ToUInt16(Reads(() => ReadBytes(2), BigEndian), 0);
         }
 
         /// <summary>
-        /// Read a integer.
+        /// Read a int.
         /// </summary>
-        /// <returns>A integer.</returns>
+        /// <returns>A int.</returns>
         public int ReadInt()
         {
-            return BitConverter.ToInt32(Reads(() => Reader.ReadBytes(4), BigEndian), 0);
+            return BitConverter.ToInt32(Reads(() => ReadBytes(4), BigEndian), 0);
         }
 
         /// <summary>
-        /// Read an unsigned integer.
+        /// Read a uint.
         /// </summary>
-        /// <returns>An unsigned integer.</returns>
+        /// <returns>A unit.</returns>
         public uint ReadUInt()
         {
-            return BitConverter.ToUInt32(Reads(() => Reader.ReadBytes(4), BigEndian), 0);
+            return BitConverter.ToUInt32(Reads(() => ReadBytes(4), BigEndian), 0);
         }
 
         /// <summary>
@@ -78,16 +78,16 @@ namespace SimpleStream
         /// <returns>A long.</returns>
         public long ReadLong()
         {
-            return BitConverter.ToInt64(Reads(() => Reader.ReadBytes(8), BigEndian), 0);
+            return BitConverter.ToInt64(Reads(() => ReadBytes(8), BigEndian), 0);
         }
 
         /// <summary>
-        /// Read an unsigned long.
+        /// Read a ulong.
         /// </summary>
-        /// <returns>An unsigned long.</returns>
+        /// <returns>A ulong.</returns>
         public ulong ReadULong()
         {
-            return BitConverter.ToUInt64(Reads(() => Reader.ReadBytes(8), BigEndian), 0);
+            return BitConverter.ToUInt64(Reads(() => ReadBytes(8), BigEndian), 0);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace SimpleStream
         /// <returns>A half.</returns>
         public Half ReadHalf()
         {
-            return BitConverter.ToHalf(Reads(() => Reader.ReadBytes(2), BigEndian), 0);
+            return BitConverter.ToHalf(Reads(() => ReadBytes(2), BigEndian), 0);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace SimpleStream
         /// <returns>A float.</returns>
         public float ReadFloat()
         {
-            return BitConverter.ToSingle(Reads(() => Reader.ReadBytes(4), BigEndian), 0);
+            return BitConverter.ToSingle(Reads(() => ReadBytes(4), BigEndian), 0);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace SimpleStream
         /// <returns>A double.</returns>
         public double ReadDouble()
         {
-            return BitConverter.ToDouble(Reads(() => Reader.ReadBytes(8), BigEndian), 0);
+            return BitConverter.ToDouble(Reads(() => ReadBytes(8), BigEndian), 0);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace SimpleStream
         /// <returns>A decimal.</returns>
         public decimal ReadDecimal()
         {
-            return ConverterUtility.ByteArrayToDecimal(Reads(() => Reader.ReadBytes(16), BigEndian), 0);
+            return ConverterUtility.ByteArrayToDecimal(Reads(() => ReadBytes(16), BigEndian), 0);
         }
 
         /// <summary>
@@ -196,12 +196,12 @@ namespace SimpleStream
             switch (order)
             {
                 case Vector2Order.XY:
-                    x = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
+                    x = ReadFloat();
+                    y = ReadFloat();
                     return new Vector2(x, y);
                 case Vector2Order.YX:
-                    y = Reader.ReadSingle();
-                    x = Reader.ReadSingle();
+                    y = ReadFloat();
+                    x = ReadFloat();
                     return new Vector2(x, y);
                 default:
                     throw new NotImplementedException($"The order: {order}; Is not supported or does not exist.");
@@ -222,24 +222,24 @@ namespace SimpleStream
             switch (order)
             {
                 case Vector3Order.XYZ:
-                    x = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
+                    x = ReadFloat();
+                    y = ReadFloat();
+                    z = ReadFloat();
                     return new Vector3(x, y, z);
                 case Vector3Order.XZY:
-                    x = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
+                    x = ReadFloat();
+                    z = ReadFloat();
+                    y = ReadFloat();
                     return new Vector3(x, y, z);
                 case Vector3Order.ZYX:
-                    z = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    x = Reader.ReadSingle();
+                    z = ReadFloat();
+                    y = ReadFloat();
+                    x = ReadFloat();
                     return new Vector3(x, y, z);
                 case Vector3Order.YZX:
-                    y = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    x = Reader.ReadSingle();
+                    y = ReadFloat();
+                    z = ReadFloat();
+                    x = ReadFloat();
                     return new Vector3(x, y, z);
                 default:
                     throw new NotImplementedException($"The order: {order}; Is not supported or does not exist.");
@@ -261,28 +261,28 @@ namespace SimpleStream
             switch (order)
             {
                 case Vector4Order.XYZW:
-                    x = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    w = Reader.ReadSingle();
+                    x = ReadFloat();
+                    y = ReadFloat();
+                    z = ReadFloat();
+                    w = ReadFloat();
                     return new Vector4(x, y, z, w);
                 case Vector4Order.XZYW:
-                    x = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    w = Reader.ReadSingle();
+                    x = ReadFloat();
+                    z = ReadFloat();
+                    y = ReadFloat();
+                    w = ReadFloat();
                     return new Vector4(x, y, z, w);
                 case Vector4Order.WZYX:
-                    w = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    x = Reader.ReadSingle();
+                    w = ReadFloat();
+                    z = ReadFloat();
+                    y = ReadFloat();
+                    x = ReadFloat();
                     return new Vector4(x, y, z, w);
                 case Vector4Order.WYZX:
-                    w = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    x = Reader.ReadSingle();
+                    w = ReadFloat();
+                    y = ReadFloat();
+                    z = ReadFloat();
+                    x = ReadFloat();
                     return new Vector4(x, y, z, w);
                 default:
                     throw new NotImplementedException($"The order: {order}; Is not supported or does not exist.");
@@ -304,28 +304,28 @@ namespace SimpleStream
             switch (order)
             {
                 case Vector4Order.XYZW:
-                    x = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    w = Reader.ReadSingle();
+                    x = ReadFloat();
+                    y = ReadFloat();
+                    z = ReadFloat();
+                    w = ReadFloat();
                     return new Quaternion(x, y, z, w);
                 case Vector4Order.XZYW:
-                    x = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    w = Reader.ReadSingle();
+                    x = ReadFloat();
+                    z = ReadFloat();
+                    y = ReadFloat();
+                    w = ReadFloat();
                     return new Quaternion(x, y, z, w);
                 case Vector4Order.WZYX:
-                    w = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    x = Reader.ReadSingle();
+                    w = ReadFloat();
+                    z = ReadFloat();
+                    y = ReadFloat();
+                    x = ReadFloat();
                     return new Quaternion(x, y, z, w);
                 case Vector4Order.WYZX:
-                    w = Reader.ReadSingle();
-                    y = Reader.ReadSingle();
-                    z = Reader.ReadSingle();
-                    x = Reader.ReadSingle();
+                    w = ReadFloat();
+                    y = ReadFloat();
+                    z = ReadFloat();
+                    x = ReadFloat();
                     return new Quaternion(x, y, z, w);
                 default:
                     throw new NotImplementedException($"The order: {order}; Is not supported or does not exist.");
@@ -347,38 +347,38 @@ namespace SimpleStream
             switch (order)
             {
                 case ColorOrder.RGB:
-                    red = Reader.ReadByte();
-                    green = Reader.ReadByte();
-                    blue = Reader.ReadByte();
+                    red = ReadByte();
+                    green = ReadByte();
+                    blue = ReadByte();
                     return Color.FromArgb(red, green, blue);
                 case ColorOrder.BGR:
-                    blue = Reader.ReadByte();
-                    green = Reader.ReadByte();
-                    red = Reader.ReadByte();
+                    blue = ReadByte();
+                    green = ReadByte();
+                    red = ReadByte();
                     return Color.FromArgb(red, green, blue);
                 case ColorOrder.RGBA:
-                    red = Reader.ReadByte();
-                    green = Reader.ReadByte();
-                    blue = Reader.ReadByte();
-                    alpha = Reader.ReadByte();
+                    red = ReadByte();
+                    green = ReadByte();
+                    blue = ReadByte();
+                    alpha = ReadByte();
                     return Color.FromArgb(alpha, red, green, blue);
                 case ColorOrder.BGRA:
-                    blue = Reader.ReadByte();
-                    green = Reader.ReadByte();
-                    red = Reader.ReadByte();
-                    alpha = Reader.ReadByte();
+                    blue = ReadByte();
+                    green = ReadByte();
+                    red = ReadByte();
+                    alpha = ReadByte();
                     return Color.FromArgb(alpha, red, green, blue);
                 case ColorOrder.ARGB:
-                    alpha = Reader.ReadByte();
-                    red = Reader.ReadByte();
-                    green = Reader.ReadByte();
-                    blue = Reader.ReadByte();
+                    alpha = ReadByte();
+                    red = ReadByte();
+                    green = ReadByte();
+                    blue = ReadByte();
                     return Color.FromArgb(alpha, red, green, blue);
                 case ColorOrder.ABGR:
-                    alpha = Reader.ReadByte();
-                    blue = Reader.ReadByte();
-                    green = Reader.ReadByte();
-                    red = Reader.ReadByte();
+                    alpha = ReadByte();
+                    blue = ReadByte();
+                    green = ReadByte();
+                    red = ReadByte();
                     return Color.FromArgb(alpha, red, green, blue);
                 default:
                     throw new NotImplementedException($"The color order: {order}; Is not supported or does not exist.");
