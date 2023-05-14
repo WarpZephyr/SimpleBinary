@@ -25,7 +25,7 @@ namespace SimpleStream
         /// Get a signed byte at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A signed byte.</returns>
+        /// <returns>An sbyte.</returns>
         public sbyte GetSByte(long position)
         {
             return Get(ReadSByte, position);
@@ -35,7 +35,7 @@ namespace SimpleStream
         /// Get a byte at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>An unsigned byte.</returns>
+        /// <returns>A byte.</returns>
         public byte GetByte(long position)
         {
             return Get(ReadByte, position);
@@ -45,37 +45,37 @@ namespace SimpleStream
         /// Get a short at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A signed short.</returns>
+        /// <returns>A short.</returns>
         public short GetShort(long position)
         {
             return Get(ReadShort, position);
         }
 
         /// <summary>
-        /// Get a unsigned short at the specified position and return.
+        /// Get a ushort at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A unsigned short.</returns>
+        /// <returns>A ushort.</returns>
         public ushort GetUShort(long position)
         {
             return Get(ReadUShort, position);
         }
 
         /// <summary>
-        /// Get a int at the specified position and return.
+        /// Get an int at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A signed integer.</returns>
+        /// <returns>An int.</returns>
         public int GetInt(long position)
         {
             return Get(ReadInt, position);
         }
 
         /// <summary>
-        /// Get a unsigned int at the specified position and return.
+        /// Get a uint at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>An unsigned integer.</returns>
+        /// <returns>A uint.</returns>
         public uint GetUInt(long position)
         {
             return Get(ReadUInt, position);
@@ -85,17 +85,17 @@ namespace SimpleStream
         /// Get a long at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A signed long.</returns>
+        /// <returns>A long.</returns>
         public long GetLong(long position)
         {
             return Get(ReadLong, position);
         }
 
         /// <summary>
-        /// Get a unsigned long at the specified position and return.
+        /// Get a ulong at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>An unsigned long.</returns>
+        /// <returns>A ulong.</returns>
         public ulong GetULong(long position)
         {
             return Get(ReadULong, position);
@@ -105,7 +105,7 @@ namespace SimpleStream
         /// Get a half at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A half-precision floating point decimal number.</returns>
+        /// <returns>A half.</returns>
         public Half GetHalf(long position)
         {
             return Get(ReadHalf, position);
@@ -115,7 +115,7 @@ namespace SimpleStream
         /// Get a float at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A floating point decimal number.</returns>
+        /// <returns>A float.</returns>
         public float GetFloat(long position)
         {
             return Get(ReadFloat, position);
@@ -125,7 +125,7 @@ namespace SimpleStream
         /// Get a double at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A double-precision floating point decimal number.</returns>
+        /// <returns>A double.</returns>
         public double GetDouble(long position)
         {
             return Get(ReadDouble, position);
@@ -135,7 +135,7 @@ namespace SimpleStream
         /// Get a decimal at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A decimal floating point number.</returns>
+        /// <returns>A decimal.</returns>
         public decimal GetDecimal(long position)
         {
             return Get(ReadDecimal, position);
@@ -145,20 +145,30 @@ namespace SimpleStream
         /// Get a varint at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A signed integer.</returns>
-        public int GetVarint(long position)
+        /// <returns>A long.</returns>
+        public long GetVarint(long position)
         {
             return Get(ReadVarint, position);
         }
 
         /// <summary>
-        /// Get a varint long at the specified position and return.
+        /// Get a 7-bit encoded int at the specified position and return.
         /// </summary>
         /// <param name="position">The position from which to get the value.</param>
-        /// <returns>A signed long.</returns>
-        public long GetCompressedLong(long position)
+        /// <returns>A int.</returns>
+        public int Get7BitEncodedInt(long position)
         {
-            return Get(ReadVarintLong, position);
+            return Get(Read7BitEncodedInt, position);
+        }
+
+        /// <summary>
+        /// Get a 7-bit encoded long at the specified position and return.
+        /// </summary>
+        /// <param name="position">The position from which to get the value.</param>
+        /// <returns>A long.</returns>
+        public long Get7BitEncodedLong(long position)
+        {
+            return Get(Read7BitEncodedLong, position);
         }
 
         /// <summary>
