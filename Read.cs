@@ -21,7 +21,7 @@ namespace SimpleStream
         /// <summary>
         /// Read a sbyte.
         /// </summary>
-        /// <returns>A sbyte.</returns>
+        /// <returns>An sbyte.</returns>
         public sbyte ReadSByte()
         {
             return Reader.ReadSByte();
@@ -55,9 +55,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Read a int.
+        /// Read an int.
         /// </summary>
-        /// <returns>A int.</returns>
+        /// <returns>An int.</returns>
         public int ReadInt()
         {
             return BitConverter.ToInt32(Reads(() => ReadBytes(4), BigEndian), 0);
