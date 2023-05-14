@@ -21,7 +21,7 @@ namespace SimpleStream
         /// <summary>
         /// See what the next signed byte is without advancing the stream.
         /// </summary>
-        /// <returns>A signed byte.</returns>
+        /// <returns>An sbyte.</returns>
         public sbyte PeekSByte()
         {
             return Peek(ReadSByte);
@@ -30,7 +30,7 @@ namespace SimpleStream
         /// <summary>
         /// See what the next byte is without advancing the stream.
         /// </summary>
-        /// <returns>An unsigned byte.</returns>
+        /// <returns>A byte.</returns>
         public byte PeekByte()
         {
             return Peek(ReadByte);
@@ -39,16 +39,16 @@ namespace SimpleStream
         /// <summary>
         /// See what the next short is without advancing the stream.
         /// </summary>
-        /// <returns>A signed short.</returns>
+        /// <returns>A short.</returns>
         public short PeekShort()
         {
             return Peek(ReadShort);
         }
 
         /// <summary>
-        /// See what the next unsigned short is without advancing the stream.
+        /// See what the next ushort is without advancing the stream.
         /// </summary>
-        /// <returns>A unsigned short.</returns>
+        /// <returns>A ushort.</returns>
         public ushort PeekUShort()
         {
             return Peek(ReadUShort);
@@ -57,16 +57,16 @@ namespace SimpleStream
         /// <summary>
         /// See what the next int is without advancing the stream.
         /// </summary>
-        /// <returns>A signed integer.</returns>
+        /// <returns>An int.</returns>
         public int PeekInt()
         {
             return Peek(ReadInt);
         }
 
         /// <summary>
-        /// See what the next unsigned int is without advancing the stream.
+        /// See what the next uint is without advancing the stream.
         /// </summary>
-        /// <returns>An unsigned integer.</returns>
+        /// <returns>A uint.</returns>
         public uint PeekUInt()
         {
             return Peek(ReadUInt);
@@ -75,16 +75,16 @@ namespace SimpleStream
         /// <summary>
         /// See what the next long is without advancing the stream.
         /// </summary>
-        /// <returns>A signed long.</returns>
+        /// <returns>A long.</returns>
         public long PeekLong()
         {
             return Peek(ReadLong);
         }
 
         /// <summary>
-        /// See what the next unsigned long is without advancing the stream.
+        /// See what the next ulong is without advancing the stream.
         /// </summary>
-        /// <returns>An unsigned long.</returns>
+        /// <returns>A ulong.</returns>
         public ulong PeekULong()
         {
             return Peek(ReadULong);
@@ -93,7 +93,7 @@ namespace SimpleStream
         /// <summary>
         /// See what the next half is without advancing the stream.
         /// </summary>
-        /// <returns>A half-precision floating point decimal number.</returns>
+        /// <returns>A half.</returns>
         public Half PeekHalf()
         {
             return Peek(ReadHalf);
@@ -102,7 +102,7 @@ namespace SimpleStream
         /// <summary>
         /// See what the next float is without advancing the stream.
         /// </summary>
-        /// <returns>A floating point decimal number.</returns>
+        /// <returns>A float.</returns>
         public float PeekFloat()
         {
             return Peek(ReadFloat);
@@ -111,7 +111,7 @@ namespace SimpleStream
         /// <summary>
         /// See what the next double is without advancing the stream.
         /// </summary>
-        /// <returns>A double-precision floating point decimal number.</returns>
+        /// <returns>A double.</returns>
         public double PeekDouble()
         {
             return Peek(ReadDouble);
@@ -120,7 +120,7 @@ namespace SimpleStream
         /// <summary>
         /// See what the next decimal is without advancing the stream.
         /// </summary>
-        /// <returns>A decimal floating point number.</returns>
+        /// <returns>A decimal.</returns>
         public decimal PeekDecimal()
         {
             return Peek(ReadDecimal);
@@ -129,19 +129,28 @@ namespace SimpleStream
         /// <summary>
         /// See what the varint is without advancing the stream.
         /// </summary>
-        /// <returns>A signed integer.</returns>
-        public int PeekVarint()
+        /// <returns>A long.</returns>
+        public long PeekVarint()
         {
             return Peek(ReadVarint);
         }
 
         /// <summary>
-        /// See what the next varint long is without advancing the stream.
+        /// See what the next 7-bit encoded int is without advancing the stream.
         /// </summary>
-        /// <returns>A signed long.</returns>
-        public long PeekVarintLong()
+        /// <returns>An int.</returns>
+        public int Peek7BitEncodedInt()
         {
-            return Peek(ReadVarintLong);
+            return Peek(Read7BitEncodedInt);
+        }
+
+        /// <summary>
+        /// See what the next 7-bit encoded long is without advancing the stream.
+        /// </summary>
+        /// <returns>A long.</returns>
+        public long Peek7BitEncodedLong()
+        {
+            return Peek(Read7BitEncodedLong);
         }
 
         /// <summary>
