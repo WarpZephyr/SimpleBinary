@@ -2,7 +2,6 @@
 using System.Numerics;
 using System.Text;
 using static SimpleStream.SimpleEnum;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SimpleStream
 {
@@ -152,21 +151,31 @@ namespace SimpleStream
         /// <summary>
         /// Write an array of varints.
         /// </summary>
-        /// <param name="values">The ints to write as varints.</param>
-        public void WriteVarints(IList<int> values)
+        /// <param name="values">The values to write as varints.</param>
+        public void WriteVarints(IList<long> values)
         {
             foreach (var value in values)
                 WriteVarint(value);
         }
 
         /// <summary>
-        /// Write an array of varint longs.
+        /// Write an array of 7-bit encoded ints.
         /// </summary>
-        /// <param name="values">The longs to write as varint longs.</param>
-        public void WriteVarintLongs(IList<long> values)
+        /// <param name="values">The ints to write.</param>
+        public void Write7BitEncodedInts(IList<int> values)
         {
             foreach (var value in values)
-                WriteVarintLong(value);
+                Write7BitEncodedInt(value);
+        }
+
+        /// <summary>
+        /// Write an array of 7-bit encoded longs.
+        /// </summary>
+        /// <param name="values">The longs to write.</param>
+        public void Write7BitEncodedLongs(IList<long> values)
+        {
+            foreach (var value in values)
+                Write7BitEncodedLong(value);
         }
 
         /// <summary>

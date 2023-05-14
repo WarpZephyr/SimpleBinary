@@ -1,4 +1,7 @@
-﻿namespace SimpleStream
+﻿using Microsoft.VisualBasic;
+using static SimpleStream.SimpleEnum;
+
+namespace SimpleStream
 {
     /// <summary>
     /// A reader that makes reading data easier.
@@ -34,6 +37,11 @@
         /// Whether or not the stream should read in big endian.
         /// </summary>
         public bool BigEndian { get; set; }
+
+        /// <summary>
+        /// The currently used varint length when reading varints.
+        /// </summary>
+        public VarintLength VarintSize { get; set; }
 
         /// <summary>
         /// The BinaryReader containing the underlying stream.

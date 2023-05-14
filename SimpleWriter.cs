@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using static SimpleStream.SimpleEnum;
 
 namespace SimpleStream
 {
@@ -33,6 +34,11 @@ namespace SimpleStream
         /// Whether or not the stream should write in big endian.
         /// </summary>
         public bool BigEndian { get; set; }
+
+        /// <summary>
+        /// The currently used varint length when reading varints.
+        /// </summary>
+        public VarintLength VarintSize { get; set; }
 
         /// <summary>
         /// The BinaryWriter containing the underlying stream.

@@ -127,38 +127,49 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Read a varint.
+        /// Read a varint depending on the set varint size.
         /// </summary>
-        /// <returns>An integer.</returns>
-        public int ReadVarint()
+        /// <returns>A long.</returns>
+        public long ReadVarint()
         {
-            var value = Reader.Read7BitEncodedInt();
-
-            if (BigEndian)
+            var value = VarintSize switch
             {
-                var bytes = BitConverter.GetBytes(value);
-                Array.Reverse(bytes);
-                return BitConverter.ToInt32(bytes, 0);
-            }
-
+                VarintLength.Int => ReadInt(),
+                VarintLength.Long => ReadLong(),
+                _ => throw new NotSupportedException($"The VarintLength: {VarintSize}; Is not supported."),
+            };
             return value;
         }
 
         /// <summary>
-        /// Read a varint long.
+        /// Read a 7-bit encoded int.
         /// </summary>
-        /// <returns>A long.</returns>
-        public long ReadVarintLong()
+        /// <returns>A int.</returns>
+        public int Read7BitEncodedInt()
         {
-            var value = Reader.Read7BitEncodedInt64();
-
+            int value = Reader.Read7BitEncodedInt();
             if (BigEndian)
             {
-                var bytes = BitConverter.GetBytes(value);
+                byte[] bytes = BitConverter.GetBytes(value);
                 Array.Reverse(bytes);
-                return BitConverter.ToInt64(bytes, 0);
+                return BitConverter.ToInt32(bytes);
             }
+            return value;
+        }
 
+        /// <summary>
+        /// Read a 7-bit encoded long.
+        /// </summary>
+        /// <returns>A long.</returns>
+        public long Read7BitEncodedLong()
+        {
+            long value = Reader.Read7BitEncodedInt64();
+            if (BigEndian)
+            {
+                byte[] bytes = BitConverter.GetBytes(value);
+                Array.Reverse(bytes);
+                return BitConverter.ToInt64(bytes);
+            }
             return value;
         }
 

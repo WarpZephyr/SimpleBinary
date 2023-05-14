@@ -105,5 +105,21 @@
             /// </summary>
             WYZX = 3,
         }
+
+        /// <summary>
+        /// The supported varint lengths.
+        /// </summary>
+        public enum VarintLength
+        {
+            /// <summary>
+            /// A 32-bit int.
+            /// </summary>
+            Int = 4,
+
+            /// <summary>
+            /// A 64-bit int.
+            /// </summary>
+            Long = 8
+        }
     }
 }

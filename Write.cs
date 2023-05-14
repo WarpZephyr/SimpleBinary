@@ -115,38 +115,53 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write a varint.
+        /// Write a varint depending on the set size.
         /// </summary>
-        /// <param name="value">An int to write as a varint.</param>
-        public void WriteVarint(int value)
+        /// <param name="value">The value to write as a varint.</param>
+        public void WriteVarint(long value)
+        {
+            switch (VarintSize)
+            {
+                case VarintLength.Int:
+                    WriteInt((int)value);
+                    break;
+                case VarintLength.Long:
+                    WriteLong(value);
+                    break;
+                default:
+                    throw new NotSupportedException($"The VarintLength: {VarintSize}; Is not supported.");
+            }
+        }
+
+        /// <summary>
+        /// Write a 7-bit encoded int.
+        /// </summary>
+        /// <param name="value">An int to write as a 7-bit encoded int.</param>
+        public void Write7BitEncodedInt(int value)
         {
             var store = value;
-
             if (BigEndian)
             {
                 var bytes = BitConverter.GetBytes(store);
                 Array.Reverse(bytes);
                 store = BitConverter.ToInt32(bytes, 0);
             }
-
             Writer.Write7BitEncodedInt(store);
         }
 
         /// <summary>
-        /// Write a varint long.
+        /// Write a 7-bit encoded long.
         /// </summary>
-        /// <param name="value">A long to write as a varint long.</param>
-        public void WriteVarintLong(long value)
+        /// <param name="value">A long to write as a 7-bit encoded long.</param>
+        public void Write7BitEncodedLong(long value)
         {
             var store = value;
-
             if (BigEndian)
             {
                 var bytes = BitConverter.GetBytes(store);
                 Array.Reverse(bytes);
                 store = BitConverter.ToInt64(bytes, 0);
             }
-
             Writer.Write7BitEncodedInt64(store);
         }
 

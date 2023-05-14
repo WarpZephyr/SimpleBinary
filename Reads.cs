@@ -227,6 +227,22 @@ namespace SimpleStream
         }
 
         /// <summary>
+        /// Read an array of varints.
+        /// </summary>
+        /// <param name="count">The number of varints to read.</param>
+        /// <returns>An array of longs from read varints.</returns>
+        /// <exception cref="InvalidOperationException">The requested number of varints goes beyond the stream.</exception>
+        public long[] ReadVarints(int count)
+        {
+            if ((count * (int)VarintSize) > Remaining)
+                throw new InvalidOperationException($"Cannot read beyond the end of the stream; Requested: {count * (int)VarintSize} bytes; Remaining: {Remaining} bytes.");
+            long[] array = new long[count];
+            for(int i = 0; i < count; i++)
+                array[i] = ReadVarint();
+            return array;
+        }
+
+        /// <summary>
         /// Read an array of booleans.
         /// </summary>
         /// <param name="count">The number of booleans to read.</param>
@@ -684,6 +700,22 @@ namespace SimpleStream
             var list = new List<decimal>();
             for (int i = 0; i < count; i++)
                 list.Add(ReadDecimal());
+            return list;
+        }
+
+        /// <summary>
+        /// Read a list of varints.
+        /// </summary>
+        /// <param name="count">The number of varints to read.</param>
+        /// <returns>A list of longs from read varints.</returns>
+        /// <exception cref="InvalidOperationException">The requested number of varints goes beyond the stream.</exception>
+        public List<long> ReadVarintList(int count)
+        {
+            if ((count * (int)VarintSize) > Remaining)
+                throw new InvalidOperationException($"Cannot read beyond the end of the stream; Requested: {count * (int)VarintSize} bytes; Remaining: {Remaining} bytes.");
+            var list = new List<long>();
+            for (int i = 0; i < count; i++)
+                list.Add(ReadVarint());
             return list;
         }
 
