@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using static SimpleStream.SimpleEnum;
+﻿using static SimpleStream.SimpleEnum;
 
 namespace SimpleStream
 {

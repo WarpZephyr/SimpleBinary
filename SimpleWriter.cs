@@ -1,8 +1,10 @@
-﻿using System.IO;
-using static SimpleStream.SimpleEnum;
+﻿using static SimpleStream.SimpleEnum;
 
 namespace SimpleStream
 {
+    /// <summary>
+    /// A writer that makes writing data easier.
+    /// </summary>
     public partial class SimpleWriter
     {
         /// <summary>
