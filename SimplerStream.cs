@@ -1,6 +1,9 @@
-﻿namespace SimpleStream
+﻿using System.Buffers.Binary;
+using System.Data.Common;
+
+namespace SimpleStream
 {
-    public partial class SimplerStream
+    public partial class SimplerStream : IDisposable, IAsyncDisposable
     {
         /// <summary>
         /// The underlying stream.
@@ -29,7 +32,7 @@
         /// <summary>
         /// The steps into positions on the stream.
         /// </summary>
-        private Stack<long> Steps;
+        private Stack<long> Steps { get; set; }
 
         /// <summary>
         /// Initialize a stream.
@@ -48,7 +51,7 @@
             if (Steps.Count != 0)
                 throw new InvalidOperationException("The stream has not been stepped all the way back out yet.");
 
-            Stream.Dispose();
+            Dispose();
         }
 
         /// <summary>
@@ -76,6 +79,16 @@
         }
 
         /// <summary>
+        /// Get a <see cref="byte" /> array of the stream in its current state without disposing it.
+        /// </summary>
+        /// <returns>A <see cref="byte" /> array.</returns>
+        public byte[] GetBytes()
+        {
+            byte[] bytes = ((MemoryStream)Stream).ToArray();
+            return bytes;
+        }
+
+        /// <summary>
         /// Set the position of the stream.
         /// </summary>
         /// <param name="position">The position to set the stream to.</param>
@@ -87,6 +100,47 @@
             if (position > Length)
                 throw new ArgumentOutOfRangeException(nameof(position), "The specified position cannot go beyond the stream");
             Position = position;
+        }
+
+        /// <summary>
+        /// Whether or not the <see cref="SimplerStream" /> has been disposed.
+        /// </summary>
+        public bool IsDisposed { get; private set; }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="SimplerStream" />
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                if (disposing)
+                    Stream.Dispose();
+
+                IsDisposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously releases the unmanaged resources used by the <see cref="SimplerStream" />.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous dispose operation.</returns>
+        public async ValueTask DisposeAsync()
+        {
+            await DisposeAsyncCore().ConfigureAwait(false);
+            Dispose(false);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual async ValueTask DisposeAsyncCore()
+        {
+            await Stream.DisposeAsync().ConfigureAwait(false);
         }
     }
 }

@@ -8,17 +8,42 @@ namespace SimpleStream
     public partial class SimpleWriter
     {
         /// <summary>
-        /// Write an array of sbytes.
+        /// Write the same byte the specified number of times.
+        /// </summary>
+        /// <param name="count">The number of times to write the byte.</param>
+        /// <param name="pattern">The value to write.</param>
+        public void WritePattern(long count, byte pattern)
+        {
+            byte[] bytes = new byte[count];
+            if (pattern != 0)
+                for (int i = 0; i < count; i++)
+                    bytes[i] = pattern;
+            WriteBytes(bytes);
+        }
+
+        /// <summary>
+        /// Write an <see cref="IList{T}" /> of type <see cref="{T}" /> using the provided function.
+        /// </summary>
+        /// <typeparam name="T">The type to write.</typeparam>
+        /// <param name="action">A function accepting the type <see cref="{T}" /> as a parameter.</param>
+        /// <param name="values">An array of type <see cref="{T}" /></param>
+        public static void WriteIList<T>(Action<T> action, IList<T> values)
+        {
+            foreach (T value in values)
+                action(value);
+        }
+
+        /// <summary>
+        /// Write an array of <see cref="sbyte" />
         /// </summary>
         /// <param name="values">The sbytes to write.</param>
         public void WriteSBytes(IList<sbyte> values)
         {
-            foreach (sbyte value in values)
-                WriteSByte(value);
+            WriteIList(WriteSByte, values);
         }
 
         /// <summary>
-        /// Write an array of bytes.
+        /// Write an array of <see cref="byte" />
         /// </summary>
         /// <param name="bytes">The bytes to write.</param>
         public void WriteBytes(byte[] bytes)
@@ -26,136 +51,115 @@ namespace SimpleStream
             byte[] store = bytes;
             if (BigEndian) 
                 Array.Reverse(store);
-            Writer.Write(bytes);
+            Writer.Write(store);
         }
 
         /// <summary>
-        /// Write an array of bytes.
+        /// Write an array of <see cref="byte" />
         /// </summary>
         /// <param name="values">The bytes to write.</param>
         public void WriteBytes(IList<byte> values)
         {
-            foreach (byte value in values)
-                WriteByte(value);
+            WriteIList(WriteByte, values);
         }
 
         /// <summary>
-        /// Write an array of shorts.
-        /// </summary>
-        /// <param name="values">The shorts to write.</param>
-        public void Write(IList<short> values)
-        {
-            WriteShorts(values);
-        }
-
-        /// <summary>
-        /// Write an array of shorts.
+        /// Write an array of <see cref="short" />
         /// </summary>
         /// <param name="values">The shorts to write.</param>
         public void WriteShorts(IList<short> values)
         {
-            foreach (var value in values)
-                WriteShort(value);
+            WriteIList(WriteShort, values);
         }
 
         /// <summary>
-        /// Write an array of shorts.
+        /// Write an array of <see cref="ushort" />
         /// </summary>
         /// <param name="values">The ushorts to write.</param>
         public void WriteUShorts(IList<ushort> values)
         {
-            foreach (var value in values)
-                WriteUShort(value);
+            WriteIList(WriteUShort, values);
         }
 
         /// <summary>
-        /// Write an array of ints.
+        /// Write an array of <see cref="int" />
         /// </summary>
         /// <param name="values">The ints to write.</param>
         public void WriteInts(IList<int> values)
         {
-            foreach (var value in values)
-                WriteInt(value);
+            WriteIList(WriteInt, values);
         }
 
         /// <summary>
-        /// Write an array of uints.
+        /// Write an array of <see cref="uint" />
         /// </summary>
         /// <param name="values">The ints to write.</param>
         public void WriteUInts(IList<uint> values)
         {
-            foreach (var value in values)
-                WriteUInt(value);
+            WriteIList(WriteUInt, values);
         }
 
         /// <summary>
-        /// Write an array of longs.
+        /// Write an array of <see cref="long" />
         /// </summary>
         /// <param name="values">The longs to write.</param>
         public void WriteLongs(IList<long> values)
         {
-            foreach (var value in values)
-                WriteLong(value);
+            WriteIList(WriteLong, values);
         }
 
         /// <summary>
-        /// Write an array of ulongs.
+        /// Write an array of <see cref="ulong" />
         /// </summary>
         /// <param name="values">The ulongs to write.</param>
         public void WriteULongs(IList<ulong> values)
         {
-            foreach (var value in values)
-                WriteULong(value);
+            WriteIList(WriteULong, values);
         }
 
         /// <summary>
-        /// Write an array of halfs.
+        /// Write an array of <see cref="Half" />
         /// </summary>
-        /// <param name="values">The halfs to write.</param>
+        /// <param name="values">The Halfs to write.</param>
         public void WriteHalfs(IList<Half> values)
         {
-            foreach (var value in values)
-                WriteHalf(value);
+            WriteIList(WriteHalf, values);
         }
 
         /// <summary>
-        /// Write an array of floats.
+        /// Write an array of <see cref="float" />
         /// </summary>
         /// <param name="values">The floats to write.</param>
         public void WriteFloats(IList<float> values)
         {
-            foreach (var value in values)
-                WriteFloat(value);
+            WriteIList(WriteFloat, values);
         }
 
         /// <summary>
-        /// Write an array of doubles.
+        /// Write an array of <see cref="double" />
         /// </summary>
         /// <param name="values">The doubles to write.</param>
         public void WriteDoubles(IList<double> values)
         {
-            foreach (var value in values)
-                WriteDouble(value);
+            WriteIList(WriteDouble, values);
         }
 
         /// <summary>
-        /// Write an array of decimals.
+        /// Write an array of <see cref="decimal" />
         /// </summary>
         /// <param name="values">The decimals to write.</param>
         public void WriteDecimals(IList<decimal> values)
         {
-            foreach (var value in values)
-                WriteDecimal(value);
+            WriteIList(WriteDecimal, values);
         }
 
         /// <summary>
-        /// Write an array of varints.
+        /// Write an array of Varints depending on the set VarintType.
         /// </summary>
-        /// <param name="values">The values to write as varints.</param>
+        /// <param name="values">The values to write as Varints.</param>
         public void WriteVarints(IList<long> values)
         {
-            foreach (var value in values)
-                WriteVarint(value);
+            WriteIList(WriteVarint, values);
         }
 
         /// <summary>
@@ -164,8 +168,7 @@ namespace SimpleStream
         /// <param name="values">The ints to write.</param>
         public void Write7BitEncodedInts(IList<int> values)
         {
-            foreach (var value in values)
-                Write7BitEncodedInt(value);
+            WriteIList(Write7BitEncodedInt, values);
         }
 
         /// <summary>
@@ -174,34 +177,31 @@ namespace SimpleStream
         /// <param name="values">The longs to write.</param>
         public void Write7BitEncodedLongs(IList<long> values)
         {
-            foreach (var value in values)
-                Write7BitEncodedLong(value);
+            WriteIList(Write7BitEncodedLong, values);
         }
 
         /// <summary>
-        /// Write an array of bools.
-        /// </summary>
-        /// <param name="values">The bools to write.</param>
-        public void WriteBools(IList<bool> values)
-        {
-            foreach (var value in values)
-                WriteBool(value);
-        }
-
-        /// <summary>
-        /// Write an array of chars.
+        /// Write an array of <see cref="char" />
         /// </summary>
         /// <param name="values">The chars to write.</param>
         public void WriteChars(IList<char> values)
         {
-            foreach (var value in values)
-                WriteChar(value);
+            WriteIList(WriteChar, values);
         }
 
         /// <summary>
-        /// Write an array of colors.
+        /// Write an array of <see cref="bool" />
         /// </summary>
-        /// <param name="values">The colors to write.</param>
+        /// <param name="values">The bools to write.</param>
+        public void WriteBools(IList<bool> values)
+        {
+            WriteIList(WriteBool, values);
+        }
+
+        /// <summary>
+        /// Write an array of <see cref="Color" />
+        /// </summary>
+        /// <param name="values">The Colors to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void WriteColors(IList<Color> values, ColorOrder order = ColorOrder.ARGB)
         {
@@ -210,9 +210,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of vector2s.
+        /// Write an array of <see cref="Vector2" />
         /// </summary>
-        /// <param name="values">The vector2s to write.</param>
+        /// <param name="values">The Vector2s to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void WriteVector2s(IList<Vector2> values, Vector2Order order = Vector2Order.XY)
         {
@@ -221,9 +221,9 @@ namespace SimpleStream
         }  
 
         /// <summary>
-        /// Write an array of vector3s.
+        /// Write an array of <see cref="Vector3" />
         /// </summary>
-        /// <param name="values">The vector3s to write.</param>
+        /// <param name="values">The Vector3s to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void WriteVector3s(IList<Vector3> values, Vector3Order order = Vector3Order.XYZ)
         {
@@ -232,9 +232,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of vector4s.
+        /// Write an array of <see cref="Vector4" />
         /// </summary>
-        /// <param name="values">The vector4s to write.</param>
+        /// <param name="values">The Vector4s to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void WriteVector4s(IList<Vector4> values, Vector4Order order = Vector4Order.XYZW)
         {
@@ -243,9 +243,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of quaternions.
+        /// Write an array of <see cref="Quaternion" />
         /// </summary>
-        /// <param name="values">The quaternions to write.</param>
+        /// <param name="values">The Quaternions to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void WriteQuaternions(IList<Quaternion> values, Vector4Order order = Vector4Order.XYZW)
         {
@@ -254,30 +254,30 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an ASCII string that has a null terminator.
+        /// Write an ASCII <see cref="string" /> with a null-terminator.
         /// </summary>
-        /// <param name="value">The string to write.</param>
+        /// <param name="value">The <see cref="string" /> to write.</param>
         public void WriteString(string value)
         {
             WriteString(value, SimpleEncoding.ASCII, true);
         }
 
         /// <summary>
-        /// Write an ASCII string with a null terminator if specified.
+        /// Write an ASCII string with a null-terminator if specified.
         /// </summary>
         /// <param name="value">The string to write.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="terminate">Whether or not to add a null-terminator to the written <see cref="string" /></param>
         public void WriteString(string value, bool terminate = true)
         {
             WriteString(value, SimpleEncoding.ASCII, terminate);
         }
 
         /// <summary>
-        /// Write a string with specified encoding and termination.
+        /// Write a <see cref="string" /> with specified <see cref="Encoding" /> and termination.
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="encoding">The encoding of the string being written.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of the <see cref="string" /></param>
+        /// <param name="terminate">Whether or not to add a null-terminator to the written <see cref="string" /></param>
         public void WriteString(string value, Encoding encoding, bool terminate = false)
         {
             if (terminate)
@@ -287,92 +287,92 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an ASCII string with a null terminator if specified.
+        /// Write an ASCII <see cref="string" /> with a null-terminator if specified.
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="terminate">Whether or not to add a null-terminator to the written <see cref="string" /></param>
         public void WriteASCII(string value, bool terminate = false)
         {
             WriteString(value, SimpleEncoding.ASCII, terminate);
         }
 
         /// <summary>
-        /// Write a Japanese Shift-JIS string with a null terminator if specified.
+        /// Write a Japanese Shift-JIS <see cref="string" /> with a null-terminator if specified.
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="terminate">Whether or not to add a null-terminator to the written <see cref="string" /></param>
         public void WriteJapanese(string value, bool terminate = false)
         {
             WriteShiftJIS(value, terminate);
         }
 
         /// <summary>
-        /// Write a fixed-size Japanese Shift-JIS string with a null terminator.
+        /// Write a fixed-size Japanese Shift-JIS <see cref="string" /> with a null-terminator.
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="size">The size of the string to write.</param>
-        /// <param name="padding">The padding to add to the written string.</param>
-        public void WriteFixedJapanese(string value, int size, byte padding = 0)
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="length">The length of the <see cref="string" />.</param>
+        /// <param name="padding">The padding to add to the written <see cref="string" /></param>
+        public void WriteFixedJapanese(string value, int length, byte padding = 0)
         {
-            WriteFixedShiftJIS(value, size, padding);
+            WriteFixedShiftJIS(value, length, padding);
         }
 
         /// <summary>
-        /// Write a Japanese Shift-JIS string with a null terminator if specified.
+        /// Write a Japanese Shift-JIS <see cref="string" /> with a null-terminator if specified.
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="terminate">Whether or not to add a null-terminator to the written <see cref="string" /></param>
         public void WriteShiftJIS(string value, bool terminate = false)
         {
             WriteString(value, SimpleEncoding.ShiftJIS, terminate);
         }
 
         /// <summary>
-        /// Write a fixed-size Japanese Shift-JIS string with a null terminator.
+        /// Write a fixed-size Japanese Shift-JIS <see cref="string" /> with a null-terminator.
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="size">The size of the string to write.</param>
-        /// <param name="padding">The padding to add to the written string.</param>
-        public void WriteFixedShiftJIS(string value, int size, byte padding = 0)
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="length">The length of the <see cref="string" /> to write.</param>
+        /// <param name="padding">The padding to add to the written <see cref="string" /></param>
+        public void WriteFixedShiftJIS(string value, int length, byte padding = 0)
         {
-            WriteFixedString(value, SimpleEncoding.ShiftJIS, size, padding);
+            WriteString(value, SimpleEncoding.ShiftJIS, length, padding);
         }
 
         /// <summary>
-        /// Write a Japanese EUC-JP string with a null terminator if specified.
+        /// Write a Japanese EUC-JP <see cref="string" /> with a null-terminator if specified.
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="terminate">Whether or not to add a null-terminator to the written <see cref="string" /></param>
         public void WriteEucJP(string value, bool terminate = false)
         {
             WriteString(value, SimpleEncoding.EucJP, terminate);
         }
 
         /// <summary>
-        /// Write a Chinese simplified EUC-CN string with a null terminator if specified.
+        /// Write a Chinese simplified EUC-CN <see cref="string" /> with a null-terminator if specified.
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="terminate">Whether or not to add a null-terminator to the written <see cref="string" /></param>
         public void WriteEucCn(string value, bool terminate = false)
         {
             WriteString(value, SimpleEncoding.EucCN, terminate);
         }
 
         /// <summary>
-        /// Write a Korean EUC-JP string with a null terminator if specified.
+        /// Write a Korean EUC-JP string with a null-null-terminator if specified.
         /// </summary>
         /// <param name="value">The string to write.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="terminate">Whether or not to add a null-null-terminator to the written string.</param>
         public void WriteEucKR(string value, bool terminate = false)
         {
             WriteString(value, SimpleEncoding.EucKR, terminate);
         }
 
         /// <summary>
-        /// Write a UTF-16 string with a null terminator if specified.
+        /// Write a UTF-16 string with a null-null-terminator if specified.
         /// </summary>
         /// <param name="value">The string to write.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="terminate">Whether or not to add a null-null-terminator to the written string.</param>
         public void WriteUTF16(string value, bool terminate = false)
         {
             if (BigEndian)
@@ -399,33 +399,33 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write a null-terminated string in a fixed-size field with the specified encoding.
+        /// Write a fixed-size <see cref="string" /> with the specified <see cref="Encoding" />
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="encoding">The encoding to write the string in.</param>
-        /// <param name="size">The size of the string to write.</param>
-        /// <param name="padding">The padding to add to the written string.</param>
-        public void WriteFixedString(string value, Encoding encoding, int size, byte padding = 0)
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of the <see cref="string" /></param>
+        /// <param name="length">The length of the <see cref="string" /></param>
+        /// <param name="padding">The padding to add to the written <see cref="string" /></param>
+        public void WriteString(string value, Encoding encoding, int length, byte padding = 0)
         {
-            byte[] fixstr = new byte[size];
-            for (int i = 0; i < size; i++)
+            byte[] fixstr = new byte[length];
+            for (int i = 0; i < length; i++)
                 fixstr[i] = padding;
 
             byte[] bytes = encoding.GetBytes(value + '\0');
-            Array.Copy(bytes, fixstr, Math.Min(size, bytes.Length));
+            Array.Copy(bytes, fixstr, Math.Min(length, bytes.Length));
             Writer.Write(fixstr);
         }
 
         /// <summary>
-        /// Write a null-terminated UTF-16 string in a fixed-size field.
+        /// Write a fixed-size UTF-16 <see cref="string" />
         /// </summary>
-        /// <param name="value">The string to write.</param>
-        /// <param name="size">The size of the string to write.</param>
-        /// <param name="padding">The padding to add to the written string.</param>
-        public void WriteFixedStringWide(string value, int size, byte padding = 0)
+        /// <param name="value">The <see cref="string" /> to write.</param>
+        /// <param name="length">The length of the <see cref="string" /></param>
+        /// <param name="padding">The padding to add to the written <see cref="string" /></param>
+        public void WriteString(string value, int length, byte padding = 0)
         {
-            byte[] fixstr = new byte[size];
-            for (int i = 0; i < size; i++)
+            byte[] fixstr = new byte[length];
+            for (int i = 0; i < length; i++)
                 fixstr[i] = padding;
 
             byte[] bytes;
@@ -433,7 +433,7 @@ namespace SimpleStream
                 bytes = SimpleEncoding.UTF16BE.GetBytes(value + '\0');
             else
                 bytes = SimpleEncoding.UTF16.GetBytes(value + '\0');
-            Array.Copy(bytes, fixstr, Math.Min(size, bytes.Length));
+            Array.Copy(bytes, fixstr, Math.Min(length, bytes.Length));
             Writer.Write(fixstr);
         }
 
@@ -447,7 +447,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of bytes.
+        /// Write an array of <see cref="byte" />
         /// </summary>
         /// <param name="bytes">The bytes to write.</param>
         public void Write(byte[] bytes)
@@ -456,7 +456,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of bytes.
+        /// Write an array of <see cref="byte" />
         /// </summary>
         /// <param name="values">The bytes to write.</param>
         public void Write(IList<byte> values)
@@ -465,7 +465,16 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of shorts.
+        /// Write an array of <see cref="short" />
+        /// </summary>
+        /// <param name="values">The shorts to write.</param>
+        public void Write(IList<short> values)
+        {
+            WriteShorts(values);
+        }
+
+        /// <summary>
+        /// Write an array of <see cref="ushort" />
         /// </summary>
         /// <param name="values">The ushorts to write.</param>
         public void Write(IList<ushort> values)
@@ -474,7 +483,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of ints.
+        /// Write an array of <see cref="int" />
         /// </summary>
         /// <param name="values">The ints to write.</param>
         public void Write(IList<int> values)
@@ -483,7 +492,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of uints.
+        /// Write an array of <see cref="uint" />
         /// </summary>
         /// <param name="values">The ints to write.</param>
         public void Write(IList<uint> values)
@@ -492,7 +501,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of longs.
+        /// Write an array of <see cref="long" />
         /// </summary>
         /// <param name="values">The longs to write.</param>
         public void Write(IList<long> values)
@@ -501,7 +510,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of ulongs.
+        /// Write an array of <see cref="ulong" />
         /// </summary>
         /// <param name="values">The ulongs to write.</param>
         public void Write(IList<ulong> values)
@@ -510,7 +519,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of halfs.
+        /// Write an array of <see cref="Half" />
         /// </summary>
         /// <param name="values">The halfs to write.</param>
         public void Write(IList<Half> values)
@@ -519,7 +528,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of floats.
+        /// Write an array of <see cref="float" />
         /// </summary>
         /// <param name="values">The floats to write.</param>
         public void Write(IList<float> values)
@@ -528,7 +537,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of doubles.
+        /// Write an array of <see cref="double" />
         /// </summary>
         /// <param name="values">The doubles to write.</param>
         public void Write(IList<double> values)
@@ -537,7 +546,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of decimals.
+        /// Write an array of <see cref="decimal" />
         /// </summary>
         /// <param name="values">The decimals to write.</param>
         public void Write(IList<decimal> values)
@@ -546,16 +555,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of bools.
-        /// </summary>
-        /// <param name="values">The bools to write.</param>
-        public void Write(IList<bool> values)
-        {
-            WriteBools(values);
-        }
-
-        /// <summary>
-        /// Write an array of chars.
+        /// Write an array of <see cref="char" />
         /// </summary>
         /// <param name="values">The chars to write.</param>
         public void Write(IList<char> values)
@@ -564,7 +564,16 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of colors.
+        /// Write an array of <see cref="bool" />
+        /// </summary>
+        /// <param name="values">The bools to write.</param>
+        public void Write(IList<bool> values)
+        {
+            WriteBools(values);
+        }
+
+        /// <summary>
+        /// Write an array of <see cref="Color" />
         /// </summary>
         /// <param name="values">The colors to write.</param>
         /// <param name="order">The order they should be written in.</param>
@@ -574,9 +583,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of vector2s.
+        /// Write an array of <see cref="Vector2" />
         /// </summary>
-        /// <param name="values">The vector2s to write.</param>
+        /// <param name="values">The Vector2s to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void Write(IList<Vector2> values, Vector2Order order = Vector2Order.XY)
         {
@@ -584,9 +593,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of vector3s.
+        /// Write an array of <see cref="Vector3" />
         /// </summary>
-        /// <param name="values">The vector3s to write.</param>
+        /// <param name="values">The Vector3s to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void Write(IList<Vector3> values, Vector3Order order = Vector3Order.XYZ)
         {
@@ -594,9 +603,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of vector4s.
+        /// Write an array of <see cref="Vector4" />
         /// </summary>
-        /// <param name="values">The vector4s to write.</param>
+        /// <param name="values">The Vector4s to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void Write(IList<Vector4> values, Vector4Order order = Vector4Order.XYZW)
         {
@@ -604,7 +613,7 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of quaternions.
+        /// Write an array of <see cref="Quaternion" />
         /// </summary>
         /// <param name="values">The quaternions to write.</param>
         /// <param name="order">The order they should be written in.</param>
@@ -618,7 +627,7 @@ namespace SimpleStream
         /// </summary>
         /// <param name="value">The string to write.</param>
         /// <param name="encoding">The encoding to write the string in.</param>
-        /// <param name="terminate">Whether or not to add a null terminator to the written string.</param>
+        /// <param name="terminate">Whether or not to add a null-null-terminator to the written string.</param>
         public void Write(string value, Encoding encoding, bool terminate = false)
         {
             WriteString(value, encoding, terminate);
@@ -628,18 +637,18 @@ namespace SimpleStream
         /// Write a fixed string with the specified encoding and size.
         /// </summary>
         /// <param name="value">The string to write.</param>
-        /// <param name="size">The size of the string to write.</param>
+        /// <param name="length">The size of the string to write.</param>
         /// <param name="encoding">The encoding to write the string in.</param>
         /// <param name="padding">The padding to add to the written string.</param>
-        public void Write(string value, Encoding encoding, int size, byte padding = 0)
+        public void Write(string value, Encoding encoding, int length, byte padding = 0)
         {
-            WriteFixedString(value, encoding, size, padding);
+            WriteString(value, encoding, length, padding);
         }
 
         /// <summary>
-        /// Write an array of vector2s.
+        /// Write an array of <see cref="Vector2" />
         /// </summary>
-        /// <param name="values">The vector2s to write.</param>
+        /// <param name="values">The Vector2s to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void WriteVectors(IList<Vector2> values, Vector2Order order = Vector2Order.XY)
         {
@@ -647,9 +656,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of vector3s.
+        /// Write an array of <see cref="Vector3" />
         /// </summary>
-        /// <param name="values">The vector3s to write.</param>
+        /// <param name="values">The Vector3s to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void WriteVectors(IList<Vector3> values, Vector3Order order = Vector3Order.XYZ)
         {
@@ -657,9 +666,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of vector4s.
+        /// Write an array of <see cref="Vector4" />
         /// </summary>
-        /// <param name="values">The vector4s to write.</param>
+        /// <param name="values">The Vector4s to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void WriteVectors(IList<Vector4> values, Vector4Order order = Vector4Order.XYZW)
         {
@@ -667,9 +676,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write an array of quaternions.
+        /// Write an array of <see cref="Quaternion" />
         /// </summary>
-        /// <param name="values">The quaternions to write.</param>
+        /// <param name="values">The Quaternions to write.</param>
         /// <param name="order">The order they should be written in.</param>
         public void WriteVectors(IList<Quaternion> values, Vector4Order order = Vector4Order.XYZW)
         {

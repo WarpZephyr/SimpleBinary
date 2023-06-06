@@ -109,7 +109,7 @@
         /// <summary>
         /// The supported varint lengths.
         /// </summary>
-        public enum VarintLength
+        public enum VarintLengthType
         {
             /// <summary>
             /// A 32-bit int.
@@ -120,6 +120,38 @@
             /// A 64-bit int.
             /// </summary>
             Long = 8
+        }
+
+        /// <summary>
+        /// See if the selected <see cref="ColorOrder"> does not support Alpha.
+        /// </summary>
+        /// <param name="order">A <see cref="ColorOrder"></param>
+        /// <returns>Whether or not the selected <see cref="ColorOrder"> does not support alpha.</returns>
+        public static bool IsColor3(this ColorOrder order)
+        {
+            return order switch
+            {
+                ColorOrder.RGB => true,
+                ColorOrder.BGR => true,
+                _ => false,
+            };
+        }
+
+        /// <summary>
+        /// See if the selected <see cref="ColorOrder"> supports Alpha.
+        /// </summary>
+        /// <param name="order">A <see cref="ColorOrder"></param>
+        /// <returns>Whether or not the selected <see cref="ColorOrder"> supports alpha.</returns>
+        public static bool IsColor4(this ColorOrder order)
+        {
+            return order switch
+            {
+                ColorOrder.RGBA => true,
+                ColorOrder.BGRA => true,
+                ColorOrder.ARGB => true,
+                ColorOrder.ABGR => true,
+                _ => false,
+            };
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SimpleStream
+﻿using System.Numerics;
+
+namespace SimpleStream
 {
     public static class Extensions
     {
@@ -24,7 +26,27 @@
             string str = "";
             foreach (var item in array)
                 str += $"{item?.ToString()} | ";
-            return str.Substring(0, str.Length - 3);
+            return str[..^3];
+        }
+
+        /// <summary>
+        /// Convert a <see cref="Vector4" /> into a <see cref="Quaternion" />
+        /// </summary>
+        /// <param name="vector">A <see cref="Vector4" /> </param>
+        /// <returns>A <see cref="Quaternion" /></returns>
+        public static Quaternion ToQuaternion(this Vector4 vector)
+        {
+            return new Quaternion(vector.X, vector.Y, vector.Z, vector.W);
+        }
+
+        /// <summary>
+        /// Convert a <see cref="Quaternion" /> into a <see cref="Vector4" />
+        /// </summary>
+        /// <param name="qut">A <see cref="Quaternion" /> </param>
+        /// <returns>A <see cref="Vector4" /></returns>
+        public static Vector4 ToVector4(this Quaternion qut)
+        {
+            return new Vector4(qut.X, qut.Y, qut.Z, qut.W);
         }
     }
 }

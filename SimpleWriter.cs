@@ -5,17 +5,17 @@ namespace SimpleStream
     /// <summary>
     /// A writer that makes writing data easier.
     /// </summary>
-    public partial class SimpleWriter
+    public partial class SimpleWriter : IDisposable, IAsyncDisposable
     {
         /// <summary>
         /// A SimplerStream to share common stream methods between the reader and writer.
         /// </summary>
-        private SimplerStream SimplerStream;
+        private SimplerStream SimplerStream { get; set; }
 
         /// <summary>
         /// The underlying stream.
         /// </summary>
-        public Stream Stream { get => SimplerStream.Stream; }
+        public Stream Stream => SimplerStream.Stream;
 
         /// <summary>
         /// Get the length of the underlying stream.
@@ -38,19 +38,34 @@ namespace SimpleStream
         public bool BigEndian { get; set; }
 
         /// <summary>
-        /// The currently used varint length when reading varints.
+        /// The currently used VarintLengthType type when writing Varints.
         /// </summary>
-        public VarintLength VarintSize { get; set; }
+        public VarintLengthType VarintType { get; set; }
+
+        /// <summary>
+        /// The current length of Varints in bytes.
+        /// </summary>
+        public long VarintLength => (long)VarintType;
 
         /// <summary>
         /// The BinaryWriter containing the underlying stream.
         /// </summary>
-        private BinaryWriter Writer;
+        private BinaryWriter Writer { get; set; }
 
         /// <summary>
         /// Reservations to be filled later in the stream.
         /// </summary>
-        private Dictionary<string, long> Reservations;
+        private Dictionary<string, long> Reservations { get; set; }
+
+        /// <summary>
+        /// Offset reservations to be filled later in the stream.
+        /// </summary>
+        private Dictionary<long, long> Offsets { get; set; }
+
+        /// <summary>
+        /// Length reservations to be filled later in the stream.
+        /// </summary>
+        private Dictionary<long, long> Lengths { get; set; } 
 
         /// <summary>
         /// Create a new SimpleWriter with a BinaryWriter.
@@ -63,6 +78,8 @@ namespace SimpleStream
             Writer = new BinaryWriter(Stream);
             BigEndian = bigendian;
             Reservations = new Dictionary<string, long>();
+            Offsets = new Dictionary<long, long>();
+            Lengths = new Dictionary<long, long>();
         }
 
         /// <summary>
@@ -76,6 +93,8 @@ namespace SimpleStream
             Writer = new BinaryWriter(Stream);
             BigEndian = bigendian;
             Reservations = new Dictionary<string, long>();
+            Offsets = new Dictionary<long, long>();
+            Lengths = new Dictionary<long, long>();
         }
 
         /// <summary>
@@ -89,6 +108,8 @@ namespace SimpleStream
             Writer = new BinaryWriter(Stream);
             BigEndian = bigendian;
             Reservations = new Dictionary<string, long>();
+            Offsets = new Dictionary<long, long>();
+            Lengths = new Dictionary<long, long>();
         }
 
         /// <summary>
@@ -102,6 +123,8 @@ namespace SimpleStream
             Writer = new BinaryWriter(Stream);
             BigEndian = bigendian;
             Reservations = new Dictionary<string, long>();
+            Offsets = new Dictionary<long, long>();
+            Lengths = new Dictionary<long, long>();
         }
 
         /// <summary>
@@ -118,14 +141,25 @@ namespace SimpleStream
             Writer = new BinaryWriter(Stream);
             BigEndian = bigendian;
             Reservations = new Dictionary<string, long>();
+            Offsets = new Dictionary<long, long>();
+            Lengths = new Dictionary<long, long>();
         }
 
         /// <summary>
         /// End the stream and release all of its resources.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Not all reservations have been filled.</exception>
         public void Finish()
         {
+            if (Reservations.Count != 0)
+                throw new InvalidOperationException($"Not all reservations are filled: {string.Join(", ", Reservations.Keys)}");
+            else if (Offsets.Count != 0)
+                throw new InvalidOperationException($"Not all reserved offsets are filled. Remaining: {Offsets.Count}");
+            else if (Lengths.Count != 0)
+                throw new InvalidOperationException($"Not all reserved lengths are filled. Remaining: {Lengths.Count}");
+
             SimplerStream.Finish();
+            Writer.Dispose();
         }
 
         /// <summary>
@@ -133,7 +167,9 @@ namespace SimpleStream
         /// </summary>
         public byte[] FinishBytes()
         {
-            return SimplerStream.FinishBytes();
+            byte[] bytes = ((MemoryStream)SimplerStream.Stream).ToArray();
+            Dispose();
+            return bytes;
         }
 
         /// <summary>
@@ -147,12 +183,72 @@ namespace SimpleStream
         }
 
         /// <summary>
+        /// Get a <see cref="byte" /> array of the stream in its current state without disposing it.
+        /// </summary>
+        /// <returns>A <see cref="byte" /> array.</returns>
+        public byte[] GetBytes()
+        {
+            return SimplerStream.GetBytes();
+        }
+
+        /// <summary>
         /// Set the position of the stream.
         /// </summary>
         /// <param name="position">The position to set the stream to.</param>
         public void SetPosition(long position)
         {
             SimplerStream.SetPosition(position);
+        }
+
+        public void SetVarintLength(long length)
+        {
+            VarintType = length switch
+            {
+                4 => VarintLengthType.Int,
+                8 => VarintLengthType.Long,
+                _ => throw new NotSupportedException($"The length: {length} is not supported as a {nameof(VarintLengthType)}."),
+            };
+        }
+
+        /// <summary>
+        /// Whether or not the <see cref="SimpleWriter" /> has been disposed.
+        /// </summary>
+        public bool IsDisposed { get; private set; }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="SimpleWriter" />
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                if (disposing)
+                    Writer.Dispose();
+
+                IsDisposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously releases the unmanaged resources used by the <see cref="SimpleWriter" />.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous dispose operation.</returns>
+        public async ValueTask DisposeAsync()
+        {
+            await DisposeAsyncCore().ConfigureAwait(false);
+            Dispose(false);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual async ValueTask DisposeAsyncCore()
+        {
+            await Writer.DisposeAsync().ConfigureAwait(false);
         }
     }
 }

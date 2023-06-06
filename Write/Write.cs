@@ -7,136 +7,136 @@ namespace SimpleStream
     public partial class SimpleWriter
     {
         /// <summary>
-        /// Write a sbyte.
+        /// Write an <see cref="sbyte" />
         /// </summary>
-        /// <param name="value">The sbyte to write.</param>
+        /// <param name="value">The <see cref="sbyte" /> to write.</param>
         public void WriteSByte(sbyte value)
         {
             Writer.Write(value);
         }
 
         /// <summary>
-        /// Write a byte.
+        /// Write a <see cref="byte" />
         /// </summary>
-        /// <param name="value">The byte to write.</param>
+        /// <param name="value">The <see cref="byte" /> to write.</param>
         public void WriteByte(byte value)
         {
             Writer.Write(value);
         }
 
         /// <summary>
-        /// Write a short.
+        /// Write a <see cref="short" />
         /// </summary>
-        /// <param name="value">The short to write.</param>
+        /// <param name="value">The <see cref="short" /> to write.</param>
         public void WriteShort(short value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Write a ushort.
+        /// Write a <see cref="ushort" />
         /// </summary>
-        /// <param name="value">The ushort to write.</param>
+        /// <param name="value">The <see cref="ushort" /> to write.</param>
         public void WriteUShort(ushort value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Write a int.
+        /// Write an <see cref="int" />
         /// </summary>
-        /// <param name="value">The int to write.</param>
+        /// <param name="value">The <see cref="int" /> to write.</param>
         public void WriteInt(int value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Write a uint.
+        /// Write a <see cref="uint" />
         /// </summary>
-        /// <param name="value">The uint to write.</param>
+        /// <param name="value">The <see cref="uint" /> to write.</param>
         public void WriteUInt(uint value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Write a long.
+        /// Write a <see cref="long" />
         /// </summary>
-        /// <param name="value">The long to write.</param>
+        /// <param name="value">The <see cref="long" /> to write.</param>
         public void WriteLong(long value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Write an unsigned long.
+        /// Write a <see cref="ulong" />
         /// </summary>
-        /// <param name="value">The ulong to write.</param>
+        /// <param name="value">The <see cref="ulong" /> to write.</param>
         public void WriteULong(ulong value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Write a half.
+        /// Write a <see cref="Half" />
         /// </summary>
-        /// <param name="value">The half to write.</param>
+        /// <param name="value">The <see cref="Half" /> to write.</param>
         public void WriteHalf(Half value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Write a float.
+        /// Write a <see cref="float" />
         /// </summary>
-        /// <param name="value">The float to write.</param>
+        /// <param name="value">The <see cref="float" /> to write.</param>
         public void WriteFloat(float value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Write a double.
+        /// Write a <see cref="double" />
         /// </summary>
-        /// <param name="value">The double to write.</param>
+        /// <param name="value">The <see cref="double" /> to write.</param>
         public void WriteDouble(double value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Write a decimal.
+        /// Write a <see cref="decimal" />
         /// </summary>
-        /// <param name="value">The decimal to write.</param>
+        /// <param name="value">The <see cref="decimal" /> to write.</param>
         public void WriteDecimal(decimal value)
         {
             WriteInts(decimal.GetBits(value));
         }
 
         /// <summary>
-        /// Write a varint depending on the set size.
+        /// Write a Varint depending on the set VarintType.
         /// </summary>
         /// <param name="value">The value to write as a varint.</param>
         public void WriteVarint(long value)
         {
-            switch (VarintSize)
+            switch (VarintType)
             {
-                case VarintLength.Int:
+                case VarintLengthType.Int:
                     WriteInt((int)value);
                     break;
-                case VarintLength.Long:
+                case VarintLengthType.Long:
                     WriteLong(value);
                     break;
                 default:
-                    throw new NotSupportedException($"The VarintLength: {VarintSize}; Is not supported.");
+                    throw new NotSupportedException($"The VarintLengthType: {VarintType}; Is not supported.");
             }
         }
 
         /// <summary>
-        /// Write a 7-bit encoded int.
+        /// Write a 7-bit encoded <see cref="int" />
         /// </summary>
-        /// <param name="value">An int to write as a 7-bit encoded int.</param>
+        /// <param name="value">An <see cref="int" /> to write as a 7-bit encoded <see cref="int" /></param>
         public void Write7BitEncodedInt(int value)
         {
             var store = value;
@@ -150,9 +150,9 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write a 7-bit encoded long.
+        /// Write a 7-bit encoded <see cref="long" />
         /// </summary>
-        /// <param name="value">A long to write as a 7-bit encoded long.</param>
+        /// <param name="value">A <see cref="long" /> to write as a 7-bit encoded <see cref="long" /></param>
         public void Write7BitEncodedLong(long value)
         {
             var store = value;
@@ -166,29 +166,29 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write a true or false boolean.
+        /// Write a <see cref="char" />
         /// </summary>
-        /// <param name="value">The bool to write.</param>
-        public void WriteBool(bool value)
-        {
-            Writer.Write(value);
-        }
-
-        /// <summary>
-        /// Write a char.
-        /// </summary>
-        /// <param name="value">The char to write.</param>
+        /// <param name="value">The <see cref="char" /> to write.</param>
         public void WriteChar(char value)
         {
             Writer.Write(value);
         }
 
         /// <summary>
-        /// Write a color.
+        /// Write a <see cref="bool" />
         /// </summary>
-        /// <param name="color">The color to write.</param>
+        /// <param name="value">The <see cref="bool" /> to write.</param>
+        public void WriteBool(bool value)
+        {
+            Writer.Write(value);
+        }
+
+        /// <summary>
+        /// Write a <see cref="Color" />
+        /// </summary>
+        /// <param name="color">The <see cref="Color" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="ColorOrder" /> was not supported.</exception>
         public void WriteColor(Color color, ColorOrder order = ColorOrder.ARGB)
         {
             byte red = color.R;
@@ -237,11 +237,11 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write a vector2.
+        /// Write a <see cref="Vector2" />
         /// </summary>
-        /// <param name="vector">The vector2 to write.</param>
+        /// <param name="vector">The <see cref="Vector2" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector2Order" /> was not supported.</exception>
         public void WriteVector2(Vector2 vector, Vector2Order order = Vector2Order.YX)
         {
             float x = vector.X;
@@ -262,12 +262,11 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write a vector3.
+        /// Write a <see cref="Vector3" />
         /// </summary>
-		/// <param name="vector">The vector3 to write.</param>
+		/// <param name="vector">The <see cref="Vector3" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <returns>A vector3.</returns>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector3Order" /> was not supported.</exception>
         public void WriteVector3(Vector3 vector, Vector3Order order = Vector3Order.XYZ)
         {
             float x = vector.X;
@@ -301,11 +300,11 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write a vector4.
+        /// Write a <see cref="Vector4" />
         /// </summary>
-		/// <param name="vector">The vector4 to write.</param>
+		/// <param name="vector">The <see cref="Vector4" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector4Order" /> was not supported.</exception>
         public void WriteVector4(Vector4 vector, Vector4Order order = Vector4Order.XYZW)
         {
             float x = vector.X;
@@ -344,11 +343,11 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write a quaternion.
+        /// Write a <see cref="Quaternion" />
         /// </summary>
-		/// <param name="quaternion">The quaternion to write.</param>
+		/// <param name="quaternion">The <see cref="Quaternion" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector4Order"> was not supported.</exception>
         public void WriteQuaternion(Quaternion quaternion, Vector4Order order = Vector4Order.XYZW)
         {
             float x = quaternion.X;
@@ -387,227 +386,225 @@ namespace SimpleStream
         }
 
         /// <summary>
-        /// Write a sbyte.
+        /// Write an <see cref="sbyte" />
         /// </summary>
-        /// <param name="value">The sbyte to write.</param>
+        /// <param name="value">The <see cref="sbyte" /> to write.</param>
         public void Write(sbyte value)
         {
             WriteSByte(value);
         }
 
         /// <summary>
-        /// Write a byte.
+        /// Write a <see cref="byte" />
         /// </summary>
-        /// <param name="value">The byte to write.</param>
+        /// <param name="value">The <see cref="byte" /> to write.</param>
         public void Write(byte value)
         {
             WriteByte(value);
         }
 
         /// <summary>
-        /// Write a short.
+        /// Write a <see cref="short" />
         /// </summary>
-        /// <param name="value">The short to write.</param>
+        /// <param name="value">The <see cref="short" /> to write.</param>
         public void Write(short value)
         {
             WriteShort(value);
         }
 
         /// <summary>
-        /// Write a ushort.
+        /// Write a <see cref="ushort" />
         /// </summary>
-        /// <param name="value">The ushort to write.</param>
+        /// <param name="value">The <see cref="ushort" /> to write.</param>
         public void Write(ushort value)
         {
             WriteUShort(value);
         }
 
         /// <summary>
-        /// Write a int.
+        /// Write an <see cref="int" />
         /// </summary>
-        /// <param name="value">The int to write.</param>
+        /// <param name="value">The <see cref="int" /> to write.</param>
         public void Write(int value)
         {
             WriteInt(value);
         }
 
         /// <summary>
-        /// Write a uint.
+        /// Write a <see cref="uint" />
         /// </summary>
-        /// <param name="value">The uint to write.</param>
+        /// <param name="value">The <see cref="uint" /> to write.</param>
         public void Write(uint value)
         {
             WriteUInt(value);
         }
 
         /// <summary>
-        /// Write a long.
+        /// Write a <see cref="long" />
         /// </summary>
-        /// <param name="value">The long to write.</param>
+        /// <param name="value">The <see cref="long" /> to write.</param>
         public void Write(long value)
         {
             WriteLong(value);
         }
 
         /// <summary>
-        /// Write a ulong.
+        /// Write a <see cref="ulong" />
         /// </summary>
-        /// <param name="value">The long to write.</param>
+        /// <param name="value">The <see cref="ulong" /> to write.</param>
         public void Write(ulong value)
         {
             WriteULong(value);
         }
 
         /// <summary>
-        /// Write a half.
+        /// Write a <see cref="Half" />
         /// </summary>
-        /// <param name="value">The half to write.</param>
+        /// <param name="value">The <see cref="Half" /> to write.</param>
         public void Write(Half value)
         {
             WriteHalf(value);
         }
 
         /// <summary>
-        /// Write a float.
+        /// Write a <see cref="float" />
         /// </summary>
-        /// <param name="value">The float to write.</param>
+        /// <param name="value">The <see cref="float" /> to write.</param>
         public void Write(float value)
         {
             WriteFloat(value);
         }
 
         /// <summary>
-        /// Write a double.
+        /// Write a <see cref="double" />
         /// </summary>
-        /// <param name="value">The double to write.</param>
+        /// <param name="value">The <see cref="double" /> to write.</param>
         public void Write(double value)
         {
             WriteDouble(value);
         }
 
         /// <summary>
-        /// Write a decimal.
+        /// Write a <see cref="decimal" />
         /// </summary>
-        /// <param name="value">The decimal to write.</param>
+        /// <param name="value">The <see cref="decimal" /> to write.</param>
         public void Write(decimal value)
         {
             WriteDecimal(value);
         }
 
         /// <summary>
-        /// Write a true or false boolean.
+        /// Write a <see cref="char" />
         /// </summary>
-        /// <param name="value">The bool to write.</param>
-        public void Write(bool value)
-        {
-            WriteBool(value);
-        }
-
-        /// <summary>
-        /// Write a char.
-        /// </summary>
-        /// <param name="value">The char to write.</param>
+        /// <param name="value">The <see cref="char" /> to write.</param>
         public void Write(char value)
         {
             WriteChar(value);
         }
 
         /// <summary>
-        /// Write a color.
+        /// Write a <see cref="bool" />
         /// </summary>
-        /// <param name="color">The color to write.</param>
+        /// <param name="value">The <see cref="bool" /> to write.</param>
+        public void Write(bool value)
+        {
+            WriteBool(value);
+        }
+
+        /// <summary>
+        /// Write a <see cref="Color" />
+        /// </summary>
+        /// <param name="color">The <see cref="Color" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="ColorOrder" /> was not supported.</exception>
         public void Write(Color color, ColorOrder order = ColorOrder.ARGB)
         {
             WriteColor(color, order);
         }
 
         /// <summary>
-        /// Write a vector2.
+        /// Write a <see cref="Vector2" />
         /// </summary>
-        /// <param name="vector">The vector2 to write.</param>
+        /// <param name="vector">The <see cref="Vector2" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector2Order" /> was not supported.</exception>
         public void Write(Vector2 vector, Vector2Order order = Vector2Order.YX)
         {
             WriteVector2(vector, order);
         }
 
         /// <summary>
-        /// Write a vector3.
+        /// Write a <see cref="Vector3" />
         /// </summary>
-		/// <param name="vector">The vector3 to write.</param>
+		/// <param name="vector">The <see cref="Vector3" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <returns>A vector3.</returns>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector3Order" /> was not supported.</exception>
         public void Write(Vector3 vector, Vector3Order order = Vector3Order.XYZ)
         {
             WriteVector3(vector, order);
         }
 
         /// <summary>
-        /// Write a vector4.
+        /// Write a <see cref="Vector4" />
         /// </summary>
-		/// <param name="vector">The vector4 to write.</param>
+		/// <param name="vector">The <see cref="Vector4" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector4Order" /> was not supported.</exception>
         public void Write(Vector4 vector, Vector4Order order = Vector4Order.XYZW)
         {
             WriteVector4(vector, order);
         }
 
         /// <summary>
-        /// Write a quaternion.
+        /// Write a <see cref="Quaternion" />
         /// </summary>
-		/// <param name="quaternion">The quaternion to write.</param>
+		/// <param name="quaternion">The <see cref="Quaternion" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector4Order" /> was not supported.</exception>
         public void Write(Quaternion quaternion, Vector4Order order = Vector4Order.XYZW)
         {
             WriteQuaternion(quaternion, order);
         }
 
         /// <summary>
-        /// Write a vector2.
+        /// Write a <see cref="Vector2" />
         /// </summary>
-        /// <param name="vector">The vector2 to write.</param>
+        /// <param name="vector">The <see cref="Vector2" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector2Order" /> was not supported.</exception>
         public void WriteVector(Vector2 vector, Vector2Order order = Vector2Order.YX)
         {
             WriteVector2(vector, order);
         }
 
         /// <summary>
-        /// Write a vector3.
+        /// Write a <see cref="Vector3" />
         /// </summary>
-		/// <param name="vector">The vector3 to write.</param>
+		/// <param name="vector">The <see cref="Vector3" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <returns>A vector3.</returns>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector3Order" /> was not supported.</exception>
         public void WriteVector(Vector3 vector, Vector3Order order = Vector3Order.XYZ)
         {
             WriteVector3(vector, order);
         }
 
         /// <summary>
-        /// Write a vector4.
+        /// Write a <see cref="Vector4" />
         /// </summary>
-		/// <param name="vector">The vector4 to write.</param>
+		/// <param name="vector">The <see cref="Vector4" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector4Order" /> was not supported.</exception>
         public void WriteVector(Vector4 vector, Vector4Order order = Vector4Order.XYZW)
         {
             WriteVector4(vector, order);
         }
 
         /// <summary>
-        /// Write a quaternion.
+        /// Write a <see cref="Quaternion" />
         /// </summary>
-		/// <param name="quaternion">The quaternion to write.</param>
+		/// <param name="quaternion">The <see cref="Quaternion" /> to write.</param>
         /// <param name="order">The order that it should be written in.</param>
-        /// <exception cref="NotImplementedException">The provided order was not supported.</exception>
+        /// <exception cref="NotImplementedException">The provided <see cref="Vector4Order" /> was not supported.</exception>
         public void WriteVector(Quaternion quaternion, Vector4Order order = Vector4Order.XYZW)
         {
             WriteQuaternion(quaternion, order);

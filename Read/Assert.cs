@@ -20,7 +20,7 @@ namespace SimpleStream
                 if (value.Equals(option))
                     return value;
 
-            throw new InvalidDataException($"Value: {value} of type: {typeof(T).FullName}; Did not match any of the selected options: {options.ArrayToString()}. Ending Position: 0x{Position:X} ({Position})");
+            throw new InvalidDataException($"Value: {value} of type: {typeof(T).FullName}; Did not match any of the selected options: {options.ArrayToString()}; Ending Position: 0x{Position:X} ({Position})");
         }
 
         /// <summary>

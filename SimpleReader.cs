@@ -5,12 +5,12 @@ namespace SimpleStream
     /// <summary>
     /// A reader that makes reading data easier.
     /// </summary>
-    public partial class SimpleReader
+    public partial class SimpleReader : IDisposable
     {
         /// <summary>
         /// A SimplerStream to share common stream methods between the reader and writer.
         /// </summary>
-        private SimplerStream SimplerStream;
+        private readonly SimplerStream SimplerStream;
 
         /// <summary>
         /// The underlying stream.
@@ -38,14 +38,19 @@ namespace SimpleStream
         public bool BigEndian { get; set; }
 
         /// <summary>
-        /// The currently used varint length when reading varints.
+        /// The currently used VarintLengthType type when reading Varints.
         /// </summary>
-        public VarintLength VarintSize { get; set; }
+        public VarintLengthType VarintType { get; set; }
+
+        /// <summary>
+        /// The current length of Varints in bytes.
+        /// </summary>
+        public long VarintLength => (long)VarintType;
 
         /// <summary>
         /// The BinaryReader containing the underlying stream.
         /// </summary>
-        private BinaryReader Reader;
+        private readonly BinaryReader Reader;
 
         /// <summary>
         /// Create a new SimpleReader with a BinaryReader.
@@ -116,6 +121,7 @@ namespace SimpleStream
         public void Finish()
         {
             SimplerStream.Finish();
+            Reader.Dispose();
         }
 
         /// <summary>
@@ -123,7 +129,9 @@ namespace SimpleStream
         /// </summary>
         public byte[] FinishBytes()
         {
-            return SimplerStream.FinishBytes();
+            byte[] bytes = ((MemoryStream)SimplerStream.Stream).ToArray();
+            Dispose();
+            return bytes;
         }
 
         /// <summary>
@@ -137,12 +145,46 @@ namespace SimpleStream
         }
 
         /// <summary>
+        /// Get a <see cref="byte" /> array of the stream in its current state without disposing it.
+        /// </summary>
+        /// <returns>A <see cref="byte" /> array.</returns>
+        public byte[] GetBytes()
+        {
+            return SimplerStream.GetBytes();
+        }
+
+        /// <summary>
         /// Set the position of the stream.
         /// </summary>
         /// <param name="position">The position to set the stream to.</param>
         public void SetPosition(long position)
         {
             SimplerStream.SetPosition(position);
+        }
+
+        /// <summary>
+        /// Whether or not the <see cref="SimpleReader" /> has been disposed.
+        /// </summary>
+        public bool IsDisposed { get; private set; }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="SimpleReader" />
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                if (disposing)
+                    Reader.Dispose();
+
+                IsDisposed = true;
+            }
         }
     }
 }
