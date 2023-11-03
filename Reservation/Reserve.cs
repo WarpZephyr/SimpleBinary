@@ -167,24 +167,6 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Reserve a <see cref="Color" /> that does not use Alpha to fill later.
-        /// </summary>
-        /// <param name="name">The name of the reservation.</param>
-        public void ReserveColor3(string name)
-        {
-            Reserve(name, "Color3", 3);
-        }
-
-        /// <summary>
-        /// Reserve a <see cref="Color" /> to fill later.
-        /// </summary>
-        /// <param name="name">The name of the reservation.</param>
-        public void ReserveColor4(string name)
-        {
-            Reserve(name, "Color4", 4);
-        }
-
-        /// <summary>
         /// Reserve a <see cref="Vector2" /> to fill later.
         /// </summary>
         /// <param name="name">The name of the reservation.</param>
@@ -218,6 +200,24 @@ namespace SimpleBinary
         public void ReserveQuaternion(string name)
         {
             Reserve(name, "Quaternion", 16);
+        }
+
+        /// <summary>
+        /// Reserve a <see cref="Color" /> that does not use Alpha to fill later.
+        /// </summary>
+        /// <param name="name">The name of the reservation.</param>
+        public void ReserveColor3(string name)
+        {
+            Reserve(name, "Color3", 3);
+        }
+
+        /// <summary>
+        /// Reserve a <see cref="Color" /> to fill later.
+        /// </summary>
+        /// <param name="name">The name of the reservation.</param>
+        public void ReserveColor4(string name)
+        {
+            Reserve(name, "Color4", 4);
         }
     }
 }

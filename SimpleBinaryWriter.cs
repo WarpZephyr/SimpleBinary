@@ -64,15 +64,15 @@ namespace SimpleBinary
         /// <summary>
         /// Offset reservations to be filled later in the stream.
         /// </summary>
-        private Dictionary<long, long> Offsets { get; set; } = new Dictionary<long, long>();
+        private Stack<KeyValuePair<long, long>> Offsets { get; set; } = new Stack<KeyValuePair<long, long>>();
 
         /// <summary>
         /// Length reservations to be filled later in the stream.
         /// </summary>
-        private Dictionary<long, long> Lengths { get; set; } = new Dictionary<long, long>();
+        private Stack<KeyValuePair<long, long>> Lengths { get; set; } = new Stack<KeyValuePair<long, long>>();
 
         /// <summary>
-        /// Create a new SimpleWriter with a BinaryWriter.
+        /// Create a new <see cref="SimpleBinaryWriter"/> with a <see cref="BinaryWriter"/>.
         /// </summary>
         /// <param name="writer">A BinaryWriter.</param>
         public SimpleBinaryWriter(BinaryWriter writer)
@@ -82,7 +82,7 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Create a new SimpleWriter with a stream.
+        /// Create a new <see cref="SimpleBinaryWriter"/> with a <see cref="System.IO.Stream"/>.
         /// </summary>
         /// <param name="stream">A stream.</param>
         public SimpleBinaryWriter(Stream stream)
@@ -92,9 +92,9 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Create a new SimpleWriter with a byte array.
+        /// Create a new <see cref="SimpleBinaryWriter"/> with a <see cref="byte"/> <see cref="Array"/>.
         /// </summary>
-        /// <param name="bytes">An array of bytes.</param>
+        /// <param name="bytes">A <see cref="byte"/> <see cref="Array"/>.</param>
         public SimpleBinaryWriter(byte[] bytes)
         {
             SimpleBinaryStream = new SimpleBinaryStream(new MemoryStream(bytes));
@@ -102,9 +102,9 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Create a new SimpleWriter with a list of bytes.
+        /// Create a new <see cref="SimpleBinaryWriter"/> with a <see cref="List{T}"/> of <see cref="byte"/>.
         /// </summary>
-        /// <param name="bytes">A list of bytes.</param>
+        /// <param name="bytes">A <see cref="List{T}"/> of <see cref="byte"/>.</param>
         public SimpleBinaryWriter(List<byte> bytes)
         {
             SimpleBinaryStream = new SimpleBinaryStream(new MemoryStream(bytes.ToArray()));
@@ -112,7 +112,7 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Create a new SimpleWriter by reading a file into a new stream.
+        /// Create a new <see cref="SimpleBinaryWriter"/> by reading a file into a new <see cref="FileStream"/>.
         /// </summary>
         /// <param name="path">The path to a file.</param>
         public SimpleBinaryWriter(string path)
@@ -142,38 +142,9 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// End the stream, release all of its resources, and return it as a byte array.
+        /// Set the current Varint length.
         /// </summary>
-        public byte[] FinishBytes()
-        {
-            byte[] bytes = ((MemoryStream)SimpleBinaryStream.Stream).ToArray();
-            Dispose();
-            return bytes;
-        }
-
-        /// <summary>
-        /// End the stream, release all of its resources, and write it as an array of bytes to a file.
-        /// </summary>
-        /// <param name="path">The path to write the stream's bytes to.</param>
-        /// <param name="overwrite">Whether or not to overwrite a file on the path if it already exists.</param>
-        public void FinishWrite(string path, bool overwrite = false)
-        {
-            SimpleBinaryStream.FinishWrite(path, overwrite);
-        }
-
-        /// <summary>
-        /// Get a <see cref="byte" /> array of the stream in its current state without disposing it.
-        /// </summary>
-        /// <returns>A <see cref="byte" /> array.</returns>
-        public byte[] GetBytes()
-        {
-            return SimpleBinaryStream.GetBytes();
-        }
-
-        /// <summary>
-        /// Set the current varint length.
-        /// </summary>
-        /// <param name="length">The length varints should be.</param>
+        /// <param name="length">The length Varints should be.</param>
         /// <exception cref="NotSupportedException">The provided length was not supported.</exception>
         public void SetVarintLength(long length)
         {
@@ -189,12 +160,24 @@ namespace SimpleBinary
 
         public void Dispose()
         {
+            if (Reservations.Count != 0)
+                throw new InvalidOperationException($"Not all reservations are filled: {string.Join(", ", Reservations.Keys)}");
+            else if (Offsets.Count != 0)
+                throw new InvalidOperationException($"Not all reserved offsets are filled. Remaining: {Offsets.Count}");
+            else if (Lengths.Count != 0)
+                throw new InvalidOperationException($"Not all reserved lengths are filled. Remaining: {Lengths.Count}");
             ((IDisposable)SimpleBinaryStream).Dispose();
             GC.SuppressFinalize(this);
         }
 
         public ValueTask DisposeAsync()
         {
+            if (Reservations.Count != 0)
+                throw new InvalidOperationException($"Not all reservations are filled: {string.Join(", ", Reservations.Keys)}");
+            else if (Offsets.Count != 0)
+                throw new InvalidOperationException($"Not all reserved offsets are filled. Remaining: {Offsets.Count}");
+            else if (Lengths.Count != 0)
+                throw new InvalidOperationException($"Not all reserved lengths are filled. Remaining: {Lengths.Count}");
             ValueTask task = ((IAsyncDisposable)Stream).DisposeAsync();
             GC.SuppressFinalize(this);
             return task;

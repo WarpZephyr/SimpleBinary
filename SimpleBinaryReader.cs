@@ -62,9 +62,9 @@ namespace SimpleBinary
         private readonly BinaryReader Reader;
 
         /// <summary>
-        /// Create a new SimpleReader with a BinaryReader.
+        /// Create a new <see cref="SimpleBinaryReader"/> with a <see cref="BinaryReader"/>.
         /// </summary>
-        /// <param name="reader">A BinaryReader.</param>
+        /// <param name="reader">A <see cref="BinaryReader"/>.</param>
         public SimpleBinaryReader(BinaryReader reader)
         {
             SimpleBinaryStream = new SimpleBinaryStream(reader.BaseStream);
@@ -72,9 +72,9 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Create a new SimpleReader with a stream.
+        /// Create a new <see cref="SimpleBinaryReader"/> with a <see cref="System.IO.Stream"/>.
         /// </summary>
-        /// <param name="stream">A stream.</param>
+        /// <param name="stream">A <see cref="System.IO.Stream"/>.</param>
         public SimpleBinaryReader(Stream stream)
         {
             SimpleBinaryStream = new SimpleBinaryStream(stream);
@@ -83,9 +83,9 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Create a new SimpleReader with a byte array.
+        /// Create a new <see cref="SimpleBinaryReader"/> with a <see cref="byte"/> <see cref="Array"/>.
         /// </summary>
-        /// <param name="bytes">An array of bytes.</param>
+        /// <param name="bytes">A <see cref="byte"/> <see cref="Array"/>.</param>
         public SimpleBinaryReader(byte[] bytes)
         {
             SimpleBinaryStream = new SimpleBinaryStream(new MemoryStream(bytes));
@@ -93,9 +93,9 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Create a new SimpleReader with a list of bytes.
+        /// Create a new <see cref="SimpleBinaryReader"/> with a <see cref="List{T}"/> of <see cref="byte"/>.
         /// </summary>
-        /// <param name="bytes">A list of bytes.</param>
+        /// <param name="bytes">A <see cref="List{T}"/> of <see cref="byte"/>.</param>
         public SimpleBinaryReader(List<byte> bytes)
         {
             SimpleBinaryStream = new SimpleBinaryStream(new MemoryStream(bytes.ToArray()));
@@ -103,7 +103,7 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Create a new SimpleReader by reading a file into the new stream.
+        /// Create a new <see cref="SimpleBinaryReader"/> by reading a file into a new <see cref="FileStream"/>.
         /// </summary>
         /// <param name="path">The path to a file.</param>
         public SimpleBinaryReader(string path)
@@ -124,39 +124,9 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// End the stream, release all of its resources, and return it as a byte array.
-        /// </summary>
-        /// <returns>A <see cref="byte" /> array.</returns>
-        public byte[] FinishBytes()
-        {
-            byte[] bytes = ((MemoryStream)SimpleBinaryStream.Stream).ToArray();
-            Dispose();
-            return bytes;
-        }
-
-        /// <summary>
-        /// End the stream, release all of its resources, and write it as an array of bytes to a file.
-        /// </summary>
-        /// <param name="path">The path to write the stream's bytes to.</param>
-        /// <param name="overwrite">Whether or not to overwrite a file on the path if it already exists.</param>
-        public void FinishWrite(string path, bool overwrite = false)
-        {
-            SimpleBinaryStream.FinishWrite(path, overwrite);
-        }
-
-        /// <summary>
-        /// Get a <see cref="byte" /> array of the stream in its current state without disposing it.
-        /// </summary>
-        /// <returns>A <see cref="byte" /> array.</returns>
-        public byte[] GetBytes()
-        {
-            return SimpleBinaryStream.GetBytes();
-        }
-
-        /// <summary>
         /// Set the current varint length.
         /// </summary>
-        /// <param name="length">The length varints should be.</param>
+        /// <param name="length">The length Varints should be.</param>
         /// <exception cref="NotSupportedException">The provided length was not supported.</exception>
         public void SetVarintLength(long length)
         {

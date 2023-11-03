@@ -198,17 +198,6 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Fill a <see cref="Color" /> reservation.
-        /// </summary>
-        /// <param name="name">The name of the reservation.</param>
-        /// <param name="value">The value to fill at the reservation.</param>
-        public void FillColor(string name, Color value, SimpleBinaryEnum.ColorOrder order)
-        {
-            string orderstr = $"{(order.IsColor3() ? "Color3" : (order.IsColor4() ? "Color4" : throw new NotSupportedException($"The color order: {order} is not supported or does not exist.")))}";
-            Fill(name, orderstr, (value) => WriteColor(value, order), value);
-        }
-
-        /// <summary>
         /// Fill a <see cref="Vector2" /> reservation.
         /// </summary>
         /// <param name="name">The name of the reservation.</param>
@@ -246,6 +235,17 @@ namespace SimpleBinary
         public void FillQuaternion(string name, Quaternion value, SimpleBinaryEnum.Vector4Order order)
         {
             Fill(name, "Quaternion", (value) => WriteQuaternion(value, order), value);
+        }
+
+        /// <summary>
+        /// Fill a <see cref="Color" /> reservation.
+        /// </summary>
+        /// <param name="name">The name of the reservation.</param>
+        /// <param name="value">The value to fill at the reservation.</param>
+        public void FillColor(string name, Color value, SimpleBinaryEnum.ColorOrder order)
+        {
+            string orderstr = $"{(order.IsColor3() ? "Color3" : (order.IsColor4() ? "Color4" : throw new NotSupportedException($"The color order: {order} is not supported or does not exist.")))}";
+            Fill(name, orderstr, (value) => WriteColor(value, order), value);
         }
     }
 }
