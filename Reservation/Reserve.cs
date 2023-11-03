@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using System.Numerics;
 
-namespace SimpleStream
+namespace SimpleBinary
 {
-    public partial class SimpleWriter
+    public partial class SimpleBinaryWriter
     {
         /// <summary>
         /// Make a reservation with a name, type name, and length of how many bytes to reserve.
@@ -155,6 +155,15 @@ namespace SimpleStream
         public void ReserveVarint(string name)
         {
             Reserve(name, $"Varint_{VarintLength}", VarintLength);
+        }
+
+        /// <summary>
+        /// Reserve an unsigned Varint to fill later depending on the current VarintLength.
+        /// </summary>
+        /// <param name="name">The name of the reservation.</param>
+        public void ReserveUnsignedVarint(string name)
+        {
+            Reserve(name, $"Unsigned_Varint_{VarintLength}", VarintLength);
         }
 
         /// <summary>

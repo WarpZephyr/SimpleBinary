@@ -1,11 +1,11 @@
 ﻿using System.Text;
 
-namespace SimpleStream
+namespace SimpleBinary
 {
     /// <summary>
     /// A class for easier access to different encodings.
     /// </summary>
-    public static class SimpleEncoding
+    public static class SimpleBinaryEncoding
     {
         /// <summary>
         /// ASCII encoding.
@@ -47,7 +47,7 @@ namespace SimpleStream
         /// </summary>
         public static readonly Encoding UTF16BE;
 
-        static SimpleEncoding()
+        static SimpleBinaryEncoding()
         {
 #if NETSTANDARD
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

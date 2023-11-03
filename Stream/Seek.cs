@@ -1,7 +1,15 @@
-﻿namespace SimpleStream
+﻿namespace SimpleBinary
 {
-    public partial class SimplerStream
+    public partial class SimpleBinaryStream
     {
+        /// <summary>
+        /// Seek forward by one byte.
+        /// </summary>
+        public void Seek()
+        {
+            Stream.Seek(1, SeekOrigin.Current);
+        }
+
         /// <summary>
         /// Seek the specified number of bytes starting from the current position of the stream.
         /// </summary>
@@ -28,7 +36,7 @@
         /// <param name="position">The position from which to start seeking.</param>
         public void Seek(long count, long position) 
         {
-            SetPosition(position);
+            Position = position;
             Stream.Seek(count, SeekOrigin.Current);
         }
 
@@ -40,87 +48,32 @@
         {
             Stream.Seek(0, origin);
         }
-    }
 
-    public partial class SimpleReader
-    {
         /// <summary>
-        /// Seek the specified number of bytes starting from the current position of the stream.
+        /// Seek backward by one byte.
         /// </summary>
-        /// <param name="count">The number of bytes to seek from the current position of the stream.</param>
-        public void Seek(long count)
+        public void SeekBackward()
         {
-            SimplerStream.Seek(count, SeekOrigin.Current);
+            Stream.Seek(-1, SeekOrigin.Current);
         }
 
         /// <summary>
-        /// Seek the specified number of bytes starting from the specified seek origin.
+        /// Seek backward by the specified number of bytes starting from the current position of the stream.
         /// </summary>
-        /// <param name="count">The number of bytes to seek.</param>
-        /// <param name="origin">The seek origin from which to start seeking.</param>
-        public void Seek(long count, SeekOrigin origin)
+        /// <param name="count">The number of bytes to seek backward by.</param>
+        public void SeekBackward(long count)
         {
-            SimplerStream.Seek(count, origin);
+            Stream.Seek(-count, SeekOrigin.Current);
         }
 
         /// <summary>
-        /// Go to the specified position and then start seeking from it.
+        /// Seek backward by the specified number of bytes starting from the specified seek origin.
         /// </summary>
-        /// <param name="count">The number of bytes to seek.</param>
-        /// <param name="position">The position from which to start seeking.</param>
-        public void Seek(long count, long position)
+        /// <param name="count">The number of bytes to seek backward by.</param>
+        /// <param name="origin">The seek origin from which to start seeking backwards from.</param>
+        public void SeekBackward(long count, SeekOrigin origin)
         {
-            SimplerStream.Seek(count, position);
-        }
-
-        /// <summary>
-        /// Seek to the specified seek origin.
-        /// </summary>
-        /// <param name="origin">The seek origin to seek to.</param>
-        public void Seek(SeekOrigin origin)
-        {
-            SimplerStream.Seek(origin);
-        }
-    }
-
-    public partial class SimpleWriter
-    {
-        /// <summary>
-        /// Seek the specified number of bytes starting from the current position of the stream.
-        /// </summary>
-        /// <param name="count">The number of bytes to seek from the current position of the stream.</param>
-        public void Seek(long count)
-        {
-            SimplerStream.Seek(count, SeekOrigin.Current);
-        }
-
-        /// <summary>
-        /// Seek the specified number of bytes starting from the specified seek origin.
-        /// </summary>
-        /// <param name="count">The number of bytes to seek.</param>
-        /// <param name="origin">The seek origin from which to start seeking.</param>
-        public void Seek(long count, SeekOrigin origin)
-        {
-            SimplerStream.Seek(count, origin);
-        }
-
-        /// <summary>
-        /// Go to the specified position and then start seeking from it.
-        /// </summary>
-        /// <param name="count">The number of bytes to seek.</param>
-        /// <param name="position">The position from which to start seeking.</param>
-        public void Seek(long count, long position)
-        {
-            SimplerStream.Seek(count, position);
-        }
-
-        /// <summary>
-        /// Seek to the specified seek origin.
-        /// </summary>
-        /// <param name="origin">The seek origin to seek to.</param>
-        public void Seek(SeekOrigin origin)
-        {
-            SimplerStream.Seek(origin);
+            Stream.Seek(-count, origin);
         }
     }
 }

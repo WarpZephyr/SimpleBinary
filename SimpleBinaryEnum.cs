@@ -1,6 +1,6 @@
-﻿namespace SimpleStream
+﻿namespace SimpleBinary
 {
-    public static class SimpleEnum
+    public static class SimpleBinaryEnum
     {
         /// <summary>
         /// The supported color orders.
@@ -8,32 +8,32 @@
         public enum ColorOrder
         {
             /// <summary>
-            /// Red green blue
+            /// Red Green Blue
             /// </summary>
             RGB = 0,
 
             /// <summary>
-            /// Blue green red
+            /// Blue Green Red
             /// </summary>
             BGR = 1,
 
             /// <summary>
-            /// Red green blue alpha
+            /// Red Green Blue Alpha
             /// </summary>
             RGBA = 2,
 
             /// <summary>
-            /// Blue green red alpha
+            /// Blue Green Red Alpha
             /// </summary>
             BGRA = 3,
 
             /// <summary>
-            /// Alpha red green blue
+            /// Alpha Red Green Blue
             /// </summary>
             ARGB = 4,
 
             /// <summary>
-            /// Alpha blue green red
+            /// Alpha Blue Green Red
             /// </summary>
             ABGR = 5
         }
@@ -111,6 +111,16 @@
         /// </summary>
         public enum VarintLengthType
         {
+            /// <summary>
+            /// An 8-bit int.
+            /// </summary>
+            Byte = 1,
+
+            /// <summary>
+            /// A 16-bit int.
+            /// </summary>
+            Short = 2,
+
             /// <summary>
             /// A 32-bit int.
             /// </summary>

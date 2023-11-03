@@ -1,6 +1,6 @@
-﻿namespace SimpleStream
+﻿namespace SimpleBinary
 {
-    public partial class SimpleWriter
+    public partial class SimpleBinaryWriter
     {
         /// <summary>
         /// Push a length reservation depending on the current VarintType onto a stack to be filled later.
@@ -25,9 +25,9 @@
 
             long start = pair.Value;
             long end = Position;
-            StepIn(start);
+            SimpleBinaryStream.StepIn(start);
             WriteVarint(end - start);
-            StepOut();
+            SimpleBinaryStream.StepOut();
 
             SetVarintLength(currentLength);
         }

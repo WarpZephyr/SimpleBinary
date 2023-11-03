@@ -1,9 +1,9 @@
-﻿using System.Buffers.Binary;
-using System.Data.Common;
-
-namespace SimpleStream
+﻿namespace SimpleBinary
 {
-    public partial class SimplerStream : IDisposable, IAsyncDisposable
+    /// <summary>
+    /// A binary stream wrapper that contains shared methods between <see cref="SimpleBinaryReader"/> and <see cref="SimpleBinaryWriter"/>.
+    /// </summary>
+    public partial class SimpleBinaryStream : IDisposable, IAsyncDisposable
     {
         /// <summary>
         /// The underlying stream.
@@ -16,18 +16,33 @@ namespace SimpleStream
         public long Position
         {
             get => Stream.Position;
-            private set => Stream.Position = value;
+            set => Stream.Position = value;
         }
 
         /// <summary>
-        /// Get the length of the underlying stream.
+        /// Get the length of the stream.
         /// </summary>
         public long Length => Stream.Length;
 
         /// <summary>
         /// Get the remaining length of the stream.
         /// </summary>
-        public long Remaining => Stream.Length - Position;
+        public long Remaining => Stream.Length - Stream.Position;
+
+        /// <summary>
+        /// Whether or not the stream can seek.
+        /// </summary>
+        public bool CanSeek => Stream.CanSeek;
+
+        /// <summary>
+        /// Whether or not the stream can be read from.
+        /// </summary>
+        public bool CanRead => Stream.CanRead;
+
+        /// <summary>
+        /// Whether or not the stream can be written to.
+        /// </summary>
+        public bool CanWrite => Stream.CanWrite;
 
         /// <summary>
         /// The steps into positions on the stream.
@@ -37,7 +52,7 @@ namespace SimpleStream
         /// <summary>
         /// Initialize a stream.
         /// </summary>
-        public SimplerStream(Stream stream)
+        public SimpleBinaryStream(Stream stream)
         {
             Stream = stream;
             Steps = new Stack<long>();
@@ -84,63 +99,20 @@ namespace SimpleStream
         /// <returns>A <see cref="byte" /> array.</returns>
         public byte[] GetBytes()
         {
-            byte[] bytes = ((MemoryStream)Stream).ToArray();
-            return bytes;
+            return ((MemoryStream)Stream).ToArray();
         }
 
-        /// <summary>
-        /// Set the position of the stream.
-        /// </summary>
-        /// <param name="position">The position to set the stream to.</param>
-        /// <exception cref="ArgumentOutOfRangeException">The position cannot be less than 0 or greater than the length of the stream.</exception>
-        public void SetPosition(long position)
-        {
-            if (position < 0)
-                throw new ArgumentOutOfRangeException(nameof(position), "The specified position cannot be negative.");
-            if (position > Length)
-                throw new ArgumentOutOfRangeException(nameof(position), "The specified position cannot go beyond the stream");
-            Position = position;
-        }
-
-        /// <summary>
-        /// Whether or not the <see cref="SimplerStream" /> has been disposed.
-        /// </summary>
-        public bool IsDisposed { get; private set; }
-
-        /// <summary>
-        /// Releases all resources used by the <see cref="SimplerStream" />
-        /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            ((IDisposable)Stream).Dispose();
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        public ValueTask DisposeAsync()
         {
-            if (!IsDisposed)
-            {
-                if (disposing)
-                    Stream.Dispose();
-
-                IsDisposed = true;
-            }
-        }
-
-        /// <summary>
-        /// Asynchronously releases the unmanaged resources used by the <see cref="SimplerStream" />.
-        /// </summary>
-        /// <returns>A task that represents the asynchronous dispose operation.</returns>
-        public async ValueTask DisposeAsync()
-        {
-            await DisposeAsyncCore().ConfigureAwait(false);
-            Dispose(false);
+            ValueTask task = ((IAsyncDisposable)Stream).DisposeAsync();
             GC.SuppressFinalize(this);
-        }
-
-        protected virtual async ValueTask DisposeAsyncCore()
-        {
-            await Stream.DisposeAsync().ConfigureAwait(false);
+            return task;
         }
     }
 }

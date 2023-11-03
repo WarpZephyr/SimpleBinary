@@ -1,46 +1,55 @@
-﻿using static SimpleStream.SimpleEnum;
+﻿using static SimpleBinary.SimpleBinaryEnum;
 
-namespace SimpleStream
+namespace SimpleBinary
 {
     /// <summary>
-    /// A reader that makes reading data easier.
+    /// A reader that makes reading binary data easier.
     /// </summary>
-    public partial class SimpleReader : IDisposable
+    public partial class SimpleBinaryReader : IDisposable, IAsyncDisposable
     {
         /// <summary>
-        /// A SimplerStream to share common stream methods between the reader and writer.
+        /// A <see cref="SimpleBinary.SimpleBinaryStream" /> for seeking, skipping, among other actions.
         /// </summary>
-        private readonly SimplerStream SimplerStream;
+        public readonly SimpleBinaryStream SimpleBinaryStream;
 
         /// <summary>
         /// The underlying stream.
         /// </summary>
-        public Stream Stream { get => SimplerStream.Stream; }
+        public Stream Stream => SimpleBinaryStream.Stream;
 
         /// <summary>
         /// Get the length of the underlying stream.
         /// </summary>
-        public long Length => SimplerStream.Length;
+        public long Length => SimpleBinaryStream.Length;
 
         /// <summary>
-        /// Get the position of the underlying stream.
+        /// Get or set the position of the underlying stream.
         /// </summary>
-        public long Position => SimplerStream.Position;
+        public long Position
+        {
+            get => SimpleBinaryStream.Position;
+            set => SimpleBinaryStream.Position = value;
+        }
 
         /// <summary>
         /// Get the remaining length of the stream.
         /// </summary>
-        public long Remaining => SimplerStream.Remaining;
+        public long Remaining => SimpleBinaryStream.Remaining;
 
         /// <summary>
         /// Whether or not the stream should read in big endian.
         /// </summary>
-        public bool BigEndian { get; set; }
+        public bool BigEndian { get; set; } = false;
+
+        /// <summary>
+        /// Whether or not reading booleans should throw if encountering a value other than 0 or 1.
+        /// </summary>
+        public bool ValidateBools { get; set; } = true;
 
         /// <summary>
         /// The currently used VarintLengthType type when reading Varints.
         /// </summary>
-        public VarintLengthType VarintType { get; set; }
+        public VarintLengthType VarintType { get; set; } = VarintLengthType.Int;
 
         /// <summary>
         /// The current length of Varints in bytes.
@@ -56,63 +65,54 @@ namespace SimpleStream
         /// Create a new SimpleReader with a BinaryReader.
         /// </summary>
         /// <param name="reader">A BinaryReader.</param>
-        /// <param name="bigendian">Whether or not the stream should be read in big endian.</param>
-        public SimpleReader(BinaryReader reader, bool bigendian = false)
+        public SimpleBinaryReader(BinaryReader reader)
         {
-            SimplerStream = new SimplerStream(reader.BaseStream);
+            SimpleBinaryStream = new SimpleBinaryStream(reader.BaseStream);
             Reader = new BinaryReader(Stream);
-            BigEndian = bigendian;
         }
 
         /// <summary>
         /// Create a new SimpleReader with a stream.
         /// </summary>
         /// <param name="stream">A stream.</param>
-        /// <param name="bigendian">Whether or not the stream should be read in big endian.</param>
-        public SimpleReader(Stream stream, bool bigendian = false)
+        public SimpleBinaryReader(Stream stream)
         {
-            SimplerStream = new SimplerStream(stream);
+            SimpleBinaryStream = new SimpleBinaryStream(stream);
             Reader = new BinaryReader(Stream);
-            BigEndian = bigendian;
+
         }
 
         /// <summary>
-        /// Create a new SimpleReader with a byte array which makes a non-resizable memory stream for the reader.
+        /// Create a new SimpleReader with a byte array.
         /// </summary>
         /// <param name="bytes">An array of bytes.</param>
-        /// <param name="bigendian">Whether or not the stream should be read in big endian.</param>
-        public SimpleReader(byte[] bytes, bool bigendian = false)
+        public SimpleBinaryReader(byte[] bytes)
         {
-            SimplerStream = new SimplerStream(new MemoryStream(bytes));
+            SimpleBinaryStream = new SimpleBinaryStream(new MemoryStream(bytes));
             Reader = new BinaryReader(Stream);
-            BigEndian = bigendian;
         }
 
         /// <summary>
-        /// Create a new SimpleReader with a list of bytes which makes a non-resizable memory stream for the reader.
+        /// Create a new SimpleReader with a list of bytes.
         /// </summary>
         /// <param name="bytes">A list of bytes.</param>
-        /// <param name="bigendian">Whether or not the stream should be read in big endian.</param>
-        public SimpleReader(List<byte> bytes, bool bigendian = false)
+        public SimpleBinaryReader(List<byte> bytes)
         {
-            SimplerStream = new SimplerStream(new MemoryStream(bytes.ToArray()));
+            SimpleBinaryStream = new SimpleBinaryStream(new MemoryStream(bytes.ToArray()));
             Reader = new BinaryReader(Stream);
-            BigEndian = bigendian;
         }
 
         /// <summary>
         /// Create a new SimpleReader by reading a file into the new stream.
         /// </summary>
         /// <param name="path">The path to a file.</param>
-        /// <param name="bigendian">Whether or not the stream should be read in big endian.</param>
-        public SimpleReader(string path, bool bigendian = false)
+        public SimpleBinaryReader(string path)
         {
             if (!File.Exists(path))
                 throw new InvalidOperationException("The file at the specified path could not be found.");
 
-            SimplerStream = new SimplerStream(new FileStream(path, FileMode.Open, FileAccess.ReadWrite));
+            SimpleBinaryStream = new SimpleBinaryStream(new FileStream(path, FileMode.Open, FileAccess.Read));
             Reader = new BinaryReader(Stream);
-            BigEndian = bigendian;
         }
 
         /// <summary>
@@ -120,16 +120,16 @@ namespace SimpleStream
         /// </summary>
         public void Finish()
         {
-            SimplerStream.Finish();
-            Reader.Dispose();
+            Dispose();
         }
 
         /// <summary>
         /// End the stream, release all of its resources, and return it as a byte array.
         /// </summary>
+        /// <returns>A <see cref="byte" /> array.</returns>
         public byte[] FinishBytes()
         {
-            byte[] bytes = ((MemoryStream)SimplerStream.Stream).ToArray();
+            byte[] bytes = ((MemoryStream)SimpleBinaryStream.Stream).ToArray();
             Dispose();
             return bytes;
         }
@@ -141,7 +141,7 @@ namespace SimpleStream
         /// <param name="overwrite">Whether or not to overwrite a file on the path if it already exists.</param>
         public void FinishWrite(string path, bool overwrite = false)
         {
-            SimplerStream.FinishWrite(path, overwrite);
+            SimpleBinaryStream.FinishWrite(path, overwrite);
         }
 
         /// <summary>
@@ -150,41 +150,37 @@ namespace SimpleStream
         /// <returns>A <see cref="byte" /> array.</returns>
         public byte[] GetBytes()
         {
-            return SimplerStream.GetBytes();
+            return SimpleBinaryStream.GetBytes();
         }
 
         /// <summary>
-        /// Set the position of the stream.
+        /// Set the current varint length.
         /// </summary>
-        /// <param name="position">The position to set the stream to.</param>
-        public void SetPosition(long position)
+        /// <param name="length">The length varints should be.</param>
+        /// <exception cref="NotSupportedException">The provided length was not supported.</exception>
+        public void SetVarintLength(long length)
         {
-            SimplerStream.SetPosition(position);
+            VarintType = length switch
+            {
+                1 => VarintLengthType.Byte,
+                2 => VarintLengthType.Short,
+                4 => VarintLengthType.Int,
+                8 => VarintLengthType.Long,
+                _ => throw new NotSupportedException($"The length: {length} is not supported as a {nameof(VarintLengthType)}."),
+            };
         }
 
-        /// <summary>
-        /// Whether or not the <see cref="SimpleReader" /> has been disposed.
-        /// </summary>
-        public bool IsDisposed { get; private set; }
-
-        /// <summary>
-        /// Releases all resources used by the <see cref="SimpleReader" />
-        /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            ((IDisposable)SimpleBinaryStream).Dispose();
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        public ValueTask DisposeAsync()
         {
-            if (!IsDisposed)
-            {
-                if (disposing)
-                    Reader.Dispose();
-
-                IsDisposed = true;
-            }
+            ValueTask task = ((IAsyncDisposable)Stream).DisposeAsync();
+            GC.SuppressFinalize(this);
+            return task;
         }
     }
 }
