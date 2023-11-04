@@ -13,17 +13,17 @@ namespace SimpleBinary
         public SimpleBinaryStream SimpleBinaryStream { get; set; }
 
         /// <summary>
-        /// The underlying stream.
+        /// The underlying <see cref="System.IO.Stream"/>.
         /// </summary>
         public Stream Stream => SimpleBinaryStream.Stream;
 
         /// <summary>
-        /// Get the length of the underlying stream.
+        /// Get the length of the underlying <see cref="System.IO.Stream"/>.
         /// </summary>
         public long Length => SimpleBinaryStream.Length;
 
         /// <summary>
-        /// Get or set the position of the underlying stream.
+        /// Get or set the position of the underlying <see cref="System.IO.Stream"/>.
         /// </summary>
         public long Position
         {
@@ -32,17 +32,17 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Get the remaining length of the stream.
+        /// Get the remaining length of the <see cref="System.IO.Stream"/>.
         /// </summary>
         public long Remaining => SimpleBinaryStream.Remaining;
 
         /// <summary>
-        /// Whether or not the stream should write in big endian.
+        /// Whether or not the <see cref="System.IO.Stream"/> should write in big endian.
         /// </summary>
         public bool BigEndian { get; set; } = false;
 
         /// <summary>
-        /// The currently used VarintLengthType type when writing Varints.
+        /// The currently used <see cref="VarintLengthType"/> type when writing Varints.
         /// </summary>
         public VarintLengthType VarintType { get; set; } = VarintLengthType.Int;
 
@@ -52,29 +52,29 @@ namespace SimpleBinary
         public long VarintLength => (long)VarintType;
 
         /// <summary>
-        /// The BinaryWriter containing the underlying stream.
+        /// The BinaryWriter containing the underlying <see cref="System.IO.Stream"/>.
         /// </summary>
         private BinaryWriter Writer { get; set; }
 
         /// <summary>
-        /// Reservations to be filled later in the stream.
+        /// Reservations to be filled later in the <see cref="System.IO.Stream"/>.
         /// </summary>
         private Dictionary<string, long> Reservations { get; set; } = new Dictionary<string, long>();
 
         /// <summary>
-        /// Offset reservations to be filled later in the stream.
+        /// Offset reservations to be filled later in the <see cref="System.IO.Stream"/>.
         /// </summary>
         private Stack<KeyValuePair<long, long>> Offsets { get; set; } = new Stack<KeyValuePair<long, long>>();
 
         /// <summary>
-        /// Length reservations to be filled later in the stream.
+        /// Length reservations to be filled later in the <see cref="System.IO.Stream"/>.
         /// </summary>
         private Stack<KeyValuePair<long, long>> Lengths { get; set; } = new Stack<KeyValuePair<long, long>>();
 
         /// <summary>
         /// Create a new <see cref="SimpleBinaryWriter"/> with a <see cref="BinaryWriter"/>.
         /// </summary>
-        /// <param name="writer">A BinaryWriter.</param>
+        /// <param name="writer">A <see cref="BinaryWriter"/>.</param>
         public SimpleBinaryWriter(BinaryWriter writer)
         {
             SimpleBinaryStream = new SimpleBinaryStream(writer.BaseStream);
@@ -84,7 +84,7 @@ namespace SimpleBinary
         /// <summary>
         /// Create a new <see cref="SimpleBinaryWriter"/> with a <see cref="System.IO.Stream"/>.
         /// </summary>
-        /// <param name="stream">A stream.</param>
+        /// <param name="stream">A <see cref="System.IO.Stream"/>.</param>
         public SimpleBinaryWriter(Stream stream)
         {
             SimpleBinaryStream = new SimpleBinaryStream(stream);
