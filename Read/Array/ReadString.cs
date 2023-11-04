@@ -7,7 +7,7 @@ namespace SimpleBinary
         /// <summary>
         /// Read a <see cref="string" /> until a terminator is found with the specified <see cref="Encoding" />.
         /// </summary>
-        /// <param name="encoding">The <see cref="Encoding" /> of the <see cref="string" /> to read.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of the <see cref="string" />.</param>
         /// <returns>A <see cref="string" />.</returns>
         public string ReadString(Encoding encoding)
         {
@@ -37,10 +37,10 @@ namespace SimpleBinary
         /// <summary>
         /// Read a fixed-size <see cref="string" /> of the specified <see cref="Encoding" />.
         /// </summary>
-        /// <param name="encoding">The <see cref="Encoding" /> of the <see cref="string" />.</param>
         /// <param name="length">The length of the <see cref="string" />.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of the <see cref="string" />.</param>
         /// <returns>A <see cref="string" />.</returns>
-        public string ReadFixedString(Encoding encoding, int length)
+        public string ReadFixedString(int length, Encoding encoding)
         {
             return encoding.GetString(ReadBytes(encoding.IsSingleByte ? length : length * encoding.GetByteCount("\0")));
         }
@@ -115,7 +115,7 @@ namespace SimpleBinary
         /// <returns>A <see cref="string" />.</returns>
         public string ReadFixedASCII(int length)
         {
-            return ReadFixedString(SimpleBinaryEncoding.ASCII, length);
+            return ReadFixedString(length, SimpleBinaryEncoding.ASCII);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace SimpleBinary
         /// <returns>A <see cref="string" />.</returns>
         public string ReadFixedShiftJIS(int length)
         {
-            return ReadFixedString(SimpleBinaryEncoding.ShiftJIS, length);
+            return ReadFixedString(length, SimpleBinaryEncoding.ShiftJIS);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace SimpleBinary
         /// <returns>A <see cref="string" />.</returns>
         public string ReadFixedEucJP(int length)
         {
-            return ReadFixedString(SimpleBinaryEncoding.EucJP, length);
+            return ReadFixedString(length, SimpleBinaryEncoding.EucJP);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace SimpleBinary
         /// <returns>A <see cref="string" />.</returns>
         public string ReadFixedEucCN(int length)
         {
-            return ReadFixedString(SimpleBinaryEncoding.EucCN, length);
+            return ReadFixedString(length, SimpleBinaryEncoding.EucCN);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace SimpleBinary
         /// <returns>A <see cref="string" />.</returns>
         public string ReadFixedEucKR(int length)
         {
-            return ReadFixedString(SimpleBinaryEncoding.EucKR, length);
+            return ReadFixedString(length, SimpleBinaryEncoding.EucKR);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace SimpleBinary
         /// <returns>A <see cref="string" />.</returns>
         public string ReadFixedUTF8(int length)
         {
-            return ReadFixedString(SimpleBinaryEncoding.UTF8, length);
+            return ReadFixedString(length, SimpleBinaryEncoding.UTF8);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace SimpleBinary
         /// <returns>A <see cref="string" />.</returns>
         public string ReadFixedUTF16(int length)
         {
-            return ReadFixedString(BigEndian ? SimpleBinaryEncoding.UTF16BE : SimpleBinaryEncoding.UTF16, length);
+            return ReadFixedString(length, BigEndian ? SimpleBinaryEncoding.UTF16BE : SimpleBinaryEncoding.UTF16);
         }
     }
 }

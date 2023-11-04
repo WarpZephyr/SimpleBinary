@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using static SimpleBinary.SimpleBinaryEnum;
+using static SimpleBinary.Generics;
 
 namespace SimpleBinary
 {
@@ -265,6 +266,50 @@ namespace SimpleBinary
         public Color GetColor(long position, ColorOrder order = ColorOrder.ARGB)
         {
             return Get(() => ReadColor(order), position);
+        }
+
+        /// <summary>
+        /// Get a one <see cref="byte"/> <see cref="Enum"/> at the specified position.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the <see cref="Enum"/>.</typeparam>
+        /// <param name="position">The position to get the value at.</param>
+        /// <returns>An <see cref="Enum"/>.</returns>
+        public TEnum GetEnum8<TEnum>(long position) where TEnum : Enum
+        {
+            return Get(() => ReadEnum8<TEnum>(), position);
+        }
+
+        /// <summary>
+        /// Get a two <see cref="byte"/> <see cref="Enum"/> at the specified position.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the <see cref="Enum"/>.</typeparam>
+        /// <param name="position">The position to get the value at.</param>
+        /// <returns>An <see cref="Enum"/>.</returns>
+        public TEnum GetEnum16<TEnum>(long position) where TEnum : Enum
+        {
+            return Get(() => ReadEnum16<TEnum>(), position);
+        }
+
+        /// <summary>
+        /// Get a four <see cref="byte"/> <see cref="Enum"/> at the specified position.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the <see cref="Enum"/>.</typeparam>
+        /// <param name="position">The position to get the value at.</param>
+        /// <returns>An <see cref="Enum"/>.</returns>
+        public TEnum GetEnum32<TEnum>(long position) where TEnum : Enum
+        {
+            return Get(() => ReadEnum32<TEnum>(), position);
+        }
+
+        /// <summary>
+        /// Get an eight <see cref="byte"/> <see cref="Enum"/> at the specified position.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the <see cref="Enum"/>.</typeparam>
+        /// <param name="position">The position to get the value at.</param>
+        /// <returns>An <see cref="Enum"/>.</returns>
+        public TEnum GetEnum64<TEnum>(long position) where TEnum : Enum
+        {
+            return Get(() => ReadEnum64<TEnum>(), position);
         }
     }
 }

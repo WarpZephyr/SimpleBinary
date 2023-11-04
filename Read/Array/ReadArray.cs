@@ -262,10 +262,10 @@ namespace SimpleBinary
         /// <summary>
         /// Read an <see cref="Array" /> of terminated strings using the specified <see cref="Encoding" />.
         /// </summary>
-        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
         /// <param name="count">The amount to read.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
         /// <returns>An <see cref="Array" /> of <see cref="string" />.</returns>
-        public string[] ReadStrings(Encoding encoding, int count)
+        public string[] ReadStrings(int count, Encoding encoding)
         {
             return RepeatIntoArray(() => ReadString(encoding), count);
         }
@@ -273,13 +273,13 @@ namespace SimpleBinary
         /// <summary>
         /// Read an <see cref="Array" /> of fixed-size strings.
         /// </summary>
-        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
         /// <param name="count">The amount to read.</param>
         /// <param name="length">The length of each <see cref="string" />.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
         /// <returns>An <see cref="Array" /> of <see cref="string" />.</returns>
-        public string[] ReadFixedStrings(Encoding encoding, int count, int length)
+        public string[] ReadFixedStrings(int count, int length, Encoding encoding)
         {
-            return RepeatIntoArray(() => ReadFixedString(encoding, length), count);
+            return RepeatIntoArray(() => ReadFixedString(length, encoding), count);
         }
     }
 }

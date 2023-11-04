@@ -246,10 +246,10 @@ namespace SimpleBinary
         /// <summary>
         /// Read a <see cref="List{T}" /> of terminated strings using the specified <see cref="Encoding" />.
         /// </summary>
-        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
         /// <param name="count">The amount to read.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
         /// <returns>A <see cref="List{T}" /> of <see cref="string" />.</returns>
-        public List<string> ReadStringList(Encoding encoding, int count)
+        public List<string> ReadStringList(int count, Encoding encoding)
         {
             return RepeatIntoList(() => ReadString(encoding), count);
         }
@@ -257,13 +257,13 @@ namespace SimpleBinary
         /// <summary>
         /// Read a <see cref="List{T}" /> of fixed-size strings.
         /// </summary>
-        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
         /// <param name="count">The amount to read.</param>
         /// <param name="length">The length of each <see cref="string" />.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
         /// <returns>A <see cref="List{T}" /> of <see cref="string" />.</returns>
-        public List<string> ReadFixedStringList(Encoding encoding, int count, int length)
+        public List<string> ReadFixedStringList(int count, int length, Encoding encoding)
         {
-            return RepeatIntoList(() => ReadFixedString(encoding, length), count);
+            return RepeatIntoList(() => ReadFixedString(length, encoding), count);
         }
     }
 }

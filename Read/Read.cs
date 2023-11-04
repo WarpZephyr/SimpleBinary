@@ -2,7 +2,6 @@
 using System.Numerics;
 using static SimpleBinary.SimpleBinaryEnum;
 using static SimpleBinary.Generics;
-using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 
 namespace SimpleBinary
@@ -425,8 +424,10 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// Read a <see cref="byte"/> value as the specified <see cref="Enum"/>, throwing an exception if not present.
+        /// Read a one <see cref="byte"/> value as the specified <see cref="Enum"/>, throwing an exception if not present.
         /// </summary>
+        /// <typeparam name="TEnum">The type of the <see cref="Enum"/>.</typeparam>
+        /// <returns>The read <see cref="Enum"/>.</returns>
         public TEnum ReadEnum8<TEnum>() where TEnum : Enum
         {
             return ParseEnum<TEnum, byte>(ReadByte());
@@ -435,6 +436,8 @@ namespace SimpleBinary
         /// <summary>
         /// Read a two <see cref="byte"/> value as the specified <see cref="Enum"/>, throwing an exception if not present.
         /// </summary>
+        /// <typeparam name="TEnum">The type of the <see cref="Enum"/>.</typeparam>
+        /// <returns>The read <see cref="Enum"/>.</returns>
         public TEnum ReadEnum16<TEnum>() where TEnum : Enum
         {
             return ParseEnum<TEnum, ushort>(ReadUShort());
@@ -443,6 +446,8 @@ namespace SimpleBinary
         /// <summary>
         /// Read a four <see cref="byte"/> value as the specified <see cref="Enum"/>, throwing an exception if not present.
         /// </summary>
+        /// <typeparam name="TEnum">The type of the <see cref="Enum"/>.</typeparam>
+        /// <returns>The read <see cref="Enum"/>.</returns>
         public TEnum ReadEnum32<TEnum>() where TEnum : Enum
         {
             return ParseEnum<TEnum, uint>(ReadUInt());
@@ -451,6 +456,8 @@ namespace SimpleBinary
         /// <summary>
         /// Read an eight <see cref="byte"/> value as the specified <see cref="Enum"/>, throwing an exception if not present.
         /// </summary>
+        /// <typeparam name="TEnum">The type of the <see cref="Enum"/>.</typeparam>
+        /// <returns>The read <see cref="Enum"/>.</returns>
         public TEnum ReadEnum64<TEnum>() where TEnum : Enum
         {
             return ParseEnum<TEnum, ulong>(ReadULong());

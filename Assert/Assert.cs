@@ -20,7 +20,7 @@ namespace SimpleBinary
                 if (value.Equals(option))
                     return value;
 
-            throw new InvalidDataException($"Read: {value} | Expected: {string.Join(",", options)} | Ending Position: 0x{Position:X} ({Position})");
+            throw new InvalidDataException($"Read {typeof(T).Name}: {value} | Expected: {string.Join(",", options)} | Ending Position: 0x{Position:X} ({Position})");
         }
 
         /// <summary>

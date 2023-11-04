@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using System.Text;
 using static SimpleBinary.SimpleBinaryEnum;
 
 namespace SimpleBinary
@@ -277,6 +278,31 @@ namespace SimpleBinary
         public List<Color> GetColorList(long position, int count, ColorOrder order)
         {
             return GetList(() => ReadColorList(count, order), position);
+        }
+
+        /// <summary>
+        /// Get an <see cref="List{T}"/> of terminated strings at the specified position.
+        /// </summary>
+        /// <param name="position">The position to get values at</param>
+        /// <param name="count">The amount to read.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
+        /// <returns>A <see cref="List{T}"/> of <see cref="string"/>.</returns>
+        public List<string> GetStringList(long position, int count, Encoding encoding)
+        {
+            return GetList(() => ReadStringList(count, encoding), position);
+        }
+
+        /// <summary>
+        /// Get a <see cref="List{T}"/> of fixed-size strings at the specified position.
+        /// </summary>
+        /// <param name="position">The position to get values at</param>
+        /// <param name="count">The amount to read.</param>
+        /// <param name="length">The length of each <see cref="string" />.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
+        /// <returns>An <see cref="List{T}"/> of <see cref="string"/>.</returns>
+        public List<string> GetFixedStringList(long position, int count, int length, Encoding encoding)
+        {
+            return GetList(() => ReadFixedStringList(count, length, encoding), position);
         }
     }
 }

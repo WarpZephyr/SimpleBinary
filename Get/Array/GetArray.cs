@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using System.Text;
 using static SimpleBinary.SimpleBinaryEnum;
 
 namespace SimpleBinary
@@ -277,6 +278,31 @@ namespace SimpleBinary
         public Color[] GetColors(long position, int count, ColorOrder order)
         {
             return GetArray(() => ReadColors(count, order), position);
+        }
+
+        /// <summary>
+        /// Get an <see cref="Array"/> of terminated strings at the specified position.
+        /// </summary>
+        /// <param name="position">The position to get values at</param>
+        /// <param name="count">The amount to read.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
+        /// <returns>An <see cref="Array"/> of <see cref="string"/>.</returns>
+        public string[] GetStrings(long position, int count, Encoding encoding)
+        {
+            return GetArray(() => ReadStrings(count, encoding), position);
+        }
+
+        /// <summary>
+        /// Get an <see cref="Array"/> of fixed-size strings at the specified position.
+        /// </summary>
+        /// <param name="position">The position to get values at</param>
+        /// <param name="count">The amount to read.</param>
+        /// <param name="length">The length of each <see cref="string" />.</param>
+        /// <param name="encoding">The <see cref="Encoding" /> of each <see cref="string" />.</param>
+        /// <returns>An <see cref="Array"/> of <see cref="string"/>.</returns>
+        public string[] GetFixedStrings(long position, int count, int length, Encoding encoding)
+        {
+            return GetArray(() => ReadFixedStrings(count, length, encoding), position);
         }
     }
 }
