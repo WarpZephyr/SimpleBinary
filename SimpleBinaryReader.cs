@@ -116,14 +116,6 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// End the stream and release all of its resources.
-        /// </summary>
-        public void Finish()
-        {
-            Dispose();
-        }
-
-        /// <summary>
         /// Set the current varint length.
         /// </summary>
         /// <param name="length">The length Varints should be.</param>

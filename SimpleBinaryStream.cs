@@ -1,17 +1,17 @@
 ﻿namespace SimpleBinary
 {
     /// <summary>
-    /// A binary stream wrapper that contains shared methods between <see cref="SimpleBinaryReader"/> and <see cref="SimpleBinaryWriter"/>.
+    /// A <see cref="System.IO.Stream"/> wrapper that contains shared methods between <see cref="SimpleBinaryReader"/> and <see cref="SimpleBinaryWriter"/>.
     /// </summary>
     public partial class SimpleBinaryStream : IDisposable, IAsyncDisposable
     {
         /// <summary>
-        /// The underlying stream.
+        /// The underlying <see cref="System.IO.Stream"/>.
         /// </summary>
         public virtual Stream Stream { get; private set; }
 
         /// <summary>
-        /// Get the position of the underlying stream.
+        /// Get the position of the <see cref="System.IO.Stream"/>.
         /// </summary>
         public long Position
         {
@@ -20,37 +20,37 @@
         }
 
         /// <summary>
-        /// Get the length of the stream.
+        /// Get the length of the <see cref="System.IO.Stream"/>.
         /// </summary>
         public long Length => Stream.Length;
 
         /// <summary>
-        /// Get the remaining length of the stream.
+        /// Get the remaining length of the <see cref="System.IO.Stream"/>.
         /// </summary>
         public long Remaining => Stream.Length - Stream.Position;
 
         /// <summary>
-        /// Whether or not the stream can seek.
+        /// Whether or not the <see cref="System.IO.Stream"/> can seek.
         /// </summary>
         public bool CanSeek => Stream.CanSeek;
 
         /// <summary>
-        /// Whether or not the stream can be read from.
+        /// Whether or not the <see cref="System.IO.Stream"/> can be read from.
         /// </summary>
         public bool CanRead => Stream.CanRead;
 
         /// <summary>
-        /// Whether or not the stream can be written to.
+        /// Whether or not the s<see cref="System.IO.Stream"/>tream can be written to.
         /// </summary>
         public bool CanWrite => Stream.CanWrite;
 
         /// <summary>
-        /// The steps into positions on the stream.
+        /// The steps into positions on the <see cref="System.IO.Stream"/>.
         /// </summary>
         private Stack<long> Steps { get; set; }
 
         /// <summary>
-        /// Initialize a stream.
+        /// Create a new <see cref="SimpleBinaryStream"/>.
         /// </summary>
         public SimpleBinaryStream(Stream stream)
         {
@@ -59,30 +59,19 @@
         }
 
         /// <summary>
-        /// End the stream and release all of its resources.
-        /// </summary>
-        public void Finish()
-        {
-            if (Steps.Count != 0)
-                throw new InvalidOperationException("The stream has not been stepped all the way back out yet.");
-
-            Dispose();
-        }
-
-        /// <summary>
-        /// End the stream, release all of its resources, and return it as a byte array.
+        /// End the <see cref="System.IO.Stream"/>, release all of its resources, and return it as a <see cref="byte"/> <see cref="Array"/>.
         /// </summary>
         public byte[] FinishBytes()
         {
             byte[] bytes = ((MemoryStream)Stream).ToArray();
-            Finish();
+            Dispose();
             return bytes;
         }
 
         /// <summary>
-        /// End the stream, release all of its resources, and write it as an array of bytes to a file.
+        /// End the <see cref="System.IO.Stream"/>, release all of its resources, and write it as a <see cref="byte"/> <see cref="Array"/> to a file.
         /// </summary>
-        /// <param name="path">The path to write the stream's bytes to.</param>
+        /// <param name="path">The path to write to.</param>
         /// <param name="overwrite">Whether or not to overwrite a file on the path if it already exists.</param>
         /// <exception cref="InvalidOperationException">A file was found already existing on the path and overwrite was set to false.</exception>
         public void FinishWrite(string path, bool overwrite = false)
@@ -94,9 +83,9 @@
         }
 
         /// <summary>
-        /// Get a <see cref="byte" /> array of the stream in its current state without disposing it.
+        /// Get a <see cref="byte" /> <see cref="Array"/> of the <see cref="System.IO.Stream"/> in its current state without disposing it.
         /// </summary>
-        /// <returns>A <see cref="byte" /> array.</returns>
+        /// <returns>A <see cref="byte" /> <see cref="Array"/>.</returns>
         public byte[] GetBytes()
         {
             return ((MemoryStream)Stream).ToArray();
@@ -104,12 +93,18 @@
 
         public void Dispose()
         {
+            if (Steps.Count != 0)
+                throw new InvalidOperationException("The Stream has not been stepped all the way back out yet.");
+
             ((IDisposable)Stream).Dispose();
             GC.SuppressFinalize(this);
         }
 
         public ValueTask DisposeAsync()
         {
+            if (Steps.Count != 0)
+                throw new InvalidOperationException("The Stream has not been stepped all the way back out yet.");
+
             ValueTask task = ((IAsyncDisposable)Stream).DisposeAsync();
             GC.SuppressFinalize(this);
             return task;

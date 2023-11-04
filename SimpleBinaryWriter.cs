@@ -127,21 +127,6 @@ namespace SimpleBinary
         }
 
         /// <summary>
-        /// End the stream and release all of its resources.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">Not all reservations have been filled.</exception>
-        public void Finish()
-        {
-            if (Reservations.Count != 0)
-                throw new InvalidOperationException($"Not all reservations are filled: {string.Join(", ", Reservations.Keys)}");
-            else if (Offsets.Count != 0)
-                throw new InvalidOperationException($"Not all reserved offsets are filled. Remaining: {Offsets.Count}");
-            else if (Lengths.Count != 0)
-                throw new InvalidOperationException($"Not all reserved lengths are filled. Remaining: {Lengths.Count}");
-            Dispose();
-        }
-
-        /// <summary>
         /// Set the current Varint length.
         /// </summary>
         /// <param name="length">The length Varints should be.</param>
