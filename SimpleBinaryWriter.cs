@@ -117,8 +117,6 @@ namespace SimpleBinary
         /// <param name="path">The path to a file.</param>
         public SimpleBinaryWriter(string path)
         {
-            if (Directory.Exists(path))
-                throw new InvalidOperationException("The specified path was a directory and not a file.");
             if (!File.Exists(path))
                 throw new InvalidOperationException("The file at the specified path could not be found.");
 
