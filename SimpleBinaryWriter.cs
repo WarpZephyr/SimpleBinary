@@ -149,6 +149,7 @@ namespace SimpleBinary
                 throw new InvalidOperationException($"Not all reserved offsets are filled. Remaining: {Offsets.Count}");
             else if (Lengths.Count != 0)
                 throw new InvalidOperationException($"Not all reserved lengths are filled. Remaining: {Lengths.Count}");
+
             ((IDisposable)SimpleBinaryStream).Dispose();
             GC.SuppressFinalize(this);
         }
@@ -161,6 +162,7 @@ namespace SimpleBinary
                 throw new InvalidOperationException($"Not all reserved offsets are filled. Remaining: {Offsets.Count}");
             else if (Lengths.Count != 0)
                 throw new InvalidOperationException($"Not all reserved lengths are filled. Remaining: {Lengths.Count}");
+
             ValueTask task = ((IAsyncDisposable)Stream).DisposeAsync();
             GC.SuppressFinalize(this);
             return task;
