@@ -72,6 +72,15 @@ namespace SimpleBinary
         private Stack<KeyValuePair<long, long>> Lengths { get; set; } = new Stack<KeyValuePair<long, long>>();
 
         /// <summary>
+        /// Create a new <see cref="SimpleBinaryWriter"/> that uses a <see cref="MemoryStream"/>.
+        /// </summary>
+        public SimpleBinaryWriter()
+        {
+            SimpleBinaryStream = new SimpleBinaryStream(new MemoryStream());
+            Writer = new BinaryWriter(Stream);
+        }
+
+        /// <summary>
         /// Create a new <see cref="SimpleBinaryWriter"/> with a <see cref="BinaryWriter"/>.
         /// </summary>
         /// <param name="writer">A <see cref="BinaryWriter"/>.</param>
