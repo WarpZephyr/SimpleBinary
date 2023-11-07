@@ -15,7 +15,7 @@ namespace SimpleBinary
         /// <summary>
         /// The underlying stream.
         /// </summary>
-        public Stream Stream => SimpleBinaryStream.Stream;
+        public Stream Stream => SimpleBinaryStream.BaseStream;
 
         /// <summary>
         /// Get the length of the underlying stream.

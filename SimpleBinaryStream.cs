@@ -1,75 +1,84 @@
 ﻿namespace SimpleBinary
 {
     /// <summary>
-    /// A <see cref="System.IO.Stream"/> wrapper that contains shared methods between <see cref="SimpleBinaryReader"/> and <see cref="SimpleBinaryWriter"/>.
+    /// A <see cref="Stream"/> wrapper that contains shared methods between <see cref="SimpleBinaryReader"/> and <see cref="SimpleBinaryWriter"/>.
     /// </summary>
     public partial class SimpleBinaryStream : IDisposable, IAsyncDisposable
     {
         /// <summary>
-        /// The underlying <see cref="System.IO.Stream"/>.
+        /// The underlying <see cref="Stream"/>.
         /// </summary>
-        public virtual Stream Stream { get; private set; }
+        public virtual Stream BaseStream { get; private set; }
 
         /// <summary>
-        /// Get the position of the <see cref="System.IO.Stream"/>.
+        /// Get the position of the <see cref="Stream"/>.
         /// </summary>
         public long Position
         {
-            get => Stream.Position;
-            set => Stream.Position = value;
+            get => BaseStream.Position;
+            set => BaseStream.Position = value;
         }
 
         /// <summary>
-        /// Get the length of the <see cref="System.IO.Stream"/>.
+        /// Get the length of the <see cref="Stream"/>.
         /// </summary>
-        public long Length => Stream.Length;
+        public long Length => BaseStream.Length;
 
         /// <summary>
-        /// Get the remaining length of the <see cref="System.IO.Stream"/>.
+        /// Get the remaining length of the <see cref="Stream"/>.
         /// </summary>
-        public long Remaining => Stream.Length - Stream.Position;
+        public long Remaining => BaseStream.Length - BaseStream.Position;
 
         /// <summary>
-        /// Whether or not the <see cref="System.IO.Stream"/> can seek.
+        /// Whether or not the <see cref="Stream"/> can seek.
         /// </summary>
-        public bool CanSeek => Stream.CanSeek;
+        public bool CanSeek => BaseStream.CanSeek;
 
         /// <summary>
-        /// Whether or not the <see cref="System.IO.Stream"/> can be read from.
+        /// Whether or not the <see cref="Stream"/> can be read from.
         /// </summary>
-        public bool CanRead => Stream.CanRead;
+        public bool CanRead => BaseStream.CanRead;
 
         /// <summary>
-        /// Whether or not the s<see cref="System.IO.Stream"/>tream can be written to.
+        /// Whether or not the s<see cref="Stream"/>tream can be written to.
         /// </summary>
-        public bool CanWrite => Stream.CanWrite;
+        public bool CanWrite => BaseStream.CanWrite;
 
         /// <summary>
-        /// The steps into positions on the <see cref="System.IO.Stream"/>.
+        /// The steps into positions on the <see cref="Stream"/>.
         /// </summary>
         private Stack<long> Steps { get; set; }
 
         /// <summary>
-        /// Create a new <see cref="SimpleBinaryStream"/>.
+        /// Create a new <see cref="SimpleBinaryStream"/> that uses a <see cref="MemoryStream"/>.
         /// </summary>
-        public SimpleBinaryStream(Stream stream)
+        public SimpleBinaryStream()
         {
-            Stream = stream;
+            BaseStream = new MemoryStream();
             Steps = new Stack<long>();
         }
 
         /// <summary>
-        /// End the <see cref="System.IO.Stream"/>, release all of its resources, and return it as a <see cref="byte"/> <see cref="Array"/>.
+        /// Create a new <see cref="SimpleBinaryStream"/> with a <see cref="Stream"/>.
+        /// </summary>
+        public SimpleBinaryStream(Stream stream)
+        {
+            BaseStream = stream;
+            Steps = new Stack<long>();
+        }
+
+        /// <summary>
+        /// End the <see cref="Stream"/>, release all of its resources, and return it as a <see cref="byte"/> <see cref="Array"/>.
         /// </summary>
         public byte[] FinishBytes()
         {
-            byte[] bytes = ((MemoryStream)Stream).ToArray();
+            byte[] bytes = ((MemoryStream)BaseStream).ToArray();
             Dispose();
             return bytes;
         }
 
         /// <summary>
-        /// End the <see cref="System.IO.Stream"/>, release all of its resources, and write it as a <see cref="byte"/> <see cref="Array"/> to a file.
+        /// End the <see cref="Stream"/>, release all of its resources, and write it as a <see cref="byte"/> <see cref="Array"/> to a file.
         /// </summary>
         /// <param name="path">The path to write to.</param>
         /// <param name="overwrite">Whether or not to overwrite a file on the path if it already exists.</param>
@@ -83,12 +92,12 @@
         }
 
         /// <summary>
-        /// Get a <see cref="byte" /> <see cref="Array"/> of the <see cref="System.IO.Stream"/> in its current state without disposing it.
+        /// Get a <see cref="byte" /> <see cref="Array"/> of the <see cref="Stream"/> in its current state without disposing it.
         /// </summary>
         /// <returns>A <see cref="byte" /> <see cref="Array"/>.</returns>
         public byte[] GetBytes()
         {
-            return ((MemoryStream)Stream).ToArray();
+            return ((MemoryStream)BaseStream).ToArray();
         }
 
         public void Dispose()
@@ -96,7 +105,7 @@
             if (Steps.Count != 0)
                 throw new InvalidOperationException("The Stream has not been stepped all the way back out yet.");
 
-            ((IDisposable)Stream).Dispose();
+            ((IDisposable)BaseStream).Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -105,7 +114,7 @@
             if (Steps.Count != 0)
                 throw new InvalidOperationException("The Stream has not been stepped all the way back out yet.");
 
-            ValueTask task = ((IAsyncDisposable)Stream).DisposeAsync();
+            ValueTask task = ((IAsyncDisposable)BaseStream).DisposeAsync();
             GC.SuppressFinalize(this);
             return task;
         }
